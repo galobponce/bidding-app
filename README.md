@@ -1,4 +1,4 @@
-<h1 style="border: none" align="center">:computer: Auction App</h1>
+<h1 style="border: none" align="center">:computer: Bidding App</h1>
 
 # :raised_hands: Description:
 

@@ -1,22 +1,29 @@
 import { FC, FormEvent } from 'react';
-import { Input, Button, FormControl, FormLabel, FormHelperText } from '@chakra-ui/react';
+import { Input, Button, FormControl, FormHelperText } from '@chakra-ui/react';
 
 import { useForm } from '../../hooks';
 import { AuthLayout } from '../layout';
+import { startLogIn } from '../../store/auth';
+import { useGlobalDispatch } from '../../hooks';
 
 
 export const Login: FC = () => {
+
+
+  const dispatch = useGlobalDispatch();
+
   
   const { values, onInputChange } = useForm({
     username: ''
   });
-
 
   const { username } = values;
 
 
   const onFormSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    dispatch(startLogIn(username));
   };
 
 

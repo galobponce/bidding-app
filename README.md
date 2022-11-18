@@ -8,6 +8,8 @@ A web auction application for bidding on antique items.
 
 Front End is built in [React](https://reactjs.org) with [Typescript](https://www.typescriptlang.org) and styled with [ChakraUI](https://chakra-ui.com).
 
+Back End is built in [Django Rest Framework](https://www.django-rest-framework.org) with Python.
+
 # :eyes: Requirements:
 
 A [node](https://nodejs.org/) enviroment (Node 19).

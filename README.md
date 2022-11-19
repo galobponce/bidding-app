@@ -26,7 +26,9 @@ A [python](https://www.python.org) enviroment (Python 3.9).
 
 4. Run `pip install -r requirements.txt`.
 
-5. Run `python manage.py runserver`.
+5. Run `python manage.py migrate`.
+
+6. Run `python manage.py runserver`.
 
 # :question: Local Deploy (front end):
 

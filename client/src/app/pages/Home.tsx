@@ -1,6 +1,8 @@
 import { FC } from 'react';
-import { useGlobalSelector } from '../../hooks';
+
 import { AppLayout } from '../layout';
+import { useGlobalSelector } from '../../hooks';
+import { AdminView } from '../components/AdminView';
 
 
 export const Home: FC = () => {
@@ -11,11 +13,11 @@ export const Home: FC = () => {
     <AppLayout>
 
       {
-        // If user is admin, sees the items table with CRUD
+        // If user is admin, sees the items table with CRUD and search bar
         // If not, sees the gallery view to bid for items
         isAdmin
           ?
-          <h1>Items table</h1>
+          <AdminView />
           :
           <h1>Items Gallery</h1>
       }

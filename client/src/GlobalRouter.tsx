@@ -23,23 +23,23 @@ const GlobalRouter: FC = () => {
     );
   }
 
-  
+
   return (
     <BrowserRouter>
       <Routes>
 
-        { 
+        {
           // By this way, app routes are visible only if user is logged
           // and auth routes are visible only if user is not logged
           status === 'logged'
-          ?
-          <Route path='/*' element={<AppRouter />} />
-          :
-          <Route path='/auth/*' element={<AuthRouter />} />
+            ?
+            <Route path='/*' element={<AppRouter />} />
+            :
+            <Route path='/auth/*' element={<AuthRouter />} />
         }
 
         <Route path='/*' element={<Navigate to={'/auth/login'} />} />
-        
+
       </Routes>
     </BrowserRouter>
   );

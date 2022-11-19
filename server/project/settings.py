@@ -55,9 +55,9 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-# Only allowing from react client web server
+# Only allowing from react vite client web server
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:3000',
+    'http://localhost:5173',
 ]
 
 # Rest Framework settings

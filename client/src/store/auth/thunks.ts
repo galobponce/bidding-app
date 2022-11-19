@@ -19,6 +19,7 @@ export const startLogIn = (username: string) => {
         title: `There was an error logging in`,
         status: 'error' 
       }));
+      return;
     }
 
 

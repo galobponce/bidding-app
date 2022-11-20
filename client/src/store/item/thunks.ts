@@ -1,9 +1,9 @@
 import type { Dispatch } from '@reduxjs/toolkit';
 
 import { generateToast } from '../toast';
-import { getItems, modifyItem } from '../../api';
 import { Filters, Item } from '../../common/types';
 import { setItems, setLoading } from './itemSlice';
+import { createItem, getItems, modifyItem } from '../../api';
 
 
 /**
@@ -50,7 +50,7 @@ export const startLoadingItems = (page: number, filters: Filters) => {
 
     if (!res.ok) {
       dispatch(generateToast({
-        title: `There was an saving the item`,
+        title: `There was an error saving the item`,
         status: 'error' 
       }));
       return;
@@ -58,6 +58,34 @@ export const startLoadingItems = (page: number, filters: Filters) => {
 
     dispatch(generateToast({
       title: `Successfully modified`,
+      status: 'success' 
+    }));
+
+    dispatch(setLoading(false));
+  }
+}
+
+
+/**
+ * Creates an item
+ * @param item desired item to create
+ */
+ export const startCreatingItem = (item: Item) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(setLoading(true));
+
+    const res = await createItem(item);
+
+    if (!res.ok) {
+      dispatch(generateToast({
+        title: `There was an error saving the item`,
+        status: 'error' 
+      }));
+      return;
+    }
+
+    dispatch(generateToast({
+      title: `Successfully created`,
       status: 'success' 
     }));
 

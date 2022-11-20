@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { Item } from '../../common/types';
+import { Filters, Item } from '../../common/types';
 
 
 interface ItemState {
@@ -9,6 +9,7 @@ interface ItemState {
   isLoading: boolean;
   items: Item[];
   selectedItem: Item;
+  filters: Filters;
 };
 
 
@@ -23,13 +24,22 @@ interface SelectItemPayload {
   item: Item;
 }
 
+interface SetSearchFilterPayload {
+  search: string;
+}
+
+interface SetOrderingFilterPayload {
+  ordering: string;
+}
+
 
 const initialState: ItemState = {
   page: 1,
   pages: null,
   isLoading: true,
   items: [],
-  selectedItem: null
+  selectedItem: null,
+  filters: null
 };
 
 
@@ -52,8 +62,16 @@ export const itemSlice = createSlice({
 
     setSelectedItem: (state, action: PayloadAction<SelectItemPayload>) => {
       state.selectedItem = action.payload.item;
-    }
+    },
+
+    setSearchFilter: (state, action: PayloadAction<SetSearchFilterPayload>) => {
+      state.filters = { ...state.filters, ...action.payload };
+    },
+
+    setOrderingFilter: (state, action: PayloadAction<SetOrderingFilterPayload>) => {
+      state.filters = { ...state.filters, ...action.payload };
+    },
   }
 });
 
-export const { setLoading, setItems, setSelectedItem } = itemSlice.actions;
+export const { setLoading, setItems, setSelectedItem, setSearchFilter, setOrderingFilter } = itemSlice.actions;

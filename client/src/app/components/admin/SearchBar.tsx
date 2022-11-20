@@ -1,18 +1,39 @@
 import { FC, KeyboardEvent } from 'react';
-import { CloseIcon, SearchIcon, SmallCloseIcon } from '@chakra-ui/icons';
+import { SearchIcon, SmallCloseIcon } from '@chakra-ui/icons';
 import { InputGroup, Input, InputRightElement, IconButton } from '@chakra-ui/react';
 
-import { FilterComponentIterface } from './FilterComponentInterface';
+import { useForm, useGlobalDispatch } from '../../../hooks';
+import { setSearchFilter } from '../../../store/item';
 
 
-export const SearchBar: FC<FilterComponentIterface> = ({ value, handleFiltering, onInputChange }) => {
+export const SearchBar: FC = () => {
+
+  
+  const dispatch = useGlobalDispatch();
 
 
-  // If user presses 'enter' key while typing on input, filters
+  const { values, onInputChange, clearValues } = useForm({
+    search: '',
+  });
+  const { search } = values;
+
+
+  // If user presses 'enter' key while typing on input, sets the search filter
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
-      handleFiltering();
+      handleSearch();
     }
+  }
+
+
+  const handleClear = () => {
+    clearValues();
+    dispatch(setSearchFilter({ search: '' }));
+  }
+
+
+  const handleSearch = () => {
+    dispatch(setSearchFilter({ search }));
   }
 
 
@@ -23,7 +44,7 @@ export const SearchBar: FC<FilterComponentIterface> = ({ value, handleFiltering,
         name='search'
         borderRadius='2xl'
         placeholder='Search by title or description'
-        value={value}
+        value={search}
         onKeyDown={handleKeyDown}
         onChange={onInputChange}
       />
@@ -33,6 +54,7 @@ export const SearchBar: FC<FilterComponentIterface> = ({ value, handleFiltering,
           colorScheme='gray'
           aria-label='Clear'
           icon={<SmallCloseIcon />}
+          onClick={handleClear}
         />
         <IconButton
           borderRadius='2xl'
@@ -40,7 +62,7 @@ export const SearchBar: FC<FilterComponentIterface> = ({ value, handleFiltering,
           colorScheme='teal'
           aria-label='Search'
           icon={<SearchIcon />}
-          onClick={handleFiltering}
+          onClick={handleSearch}
         />
       </InputRightElement>
     </InputGroup>

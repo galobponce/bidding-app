@@ -1,14 +1,34 @@
-import { FC } from 'react';
-import { SimpleGrid } from '@chakra-ui/react';
+import { FC, useEffect } from 'react';
+import { Center, SimpleGrid } from '@chakra-ui/react';
 
 import { ItemCard } from '.';
-import { useGlobalSelector } from '../../hooks';
+import { startLoadingItems } from '../../store/item';
+import { CircleLoader } from '../../common/components';
+import { useGlobalDispatch, useGlobalSelector } from '../../hooks';
 
 
 // Gallery List
 export const ItemList: FC = () => {
 
-  const { items } = useGlobalSelector(state => state.item)
+
+  const dispatch = useGlobalDispatch();
+  const { items, filters, isLoading } = useGlobalSelector(state => state.item)
+
+
+  // When filters change, load items again
+  useEffect(() => {
+    dispatch(startLoadingItems(1, filters));
+  }, [filters])
+
+
+  // Shows loader when loading items
+  if (isLoading) {
+    return (
+      <Center m='5'>
+        <CircleLoader />
+      </Center>
+    );
+  }
 
 
   return (

@@ -1,8 +1,8 @@
 export interface Item {
-  id: string;
+  id: number;
   title: string;
   description: string;
   last_bid_user: number;
   last_bid_price: number;
-  closes_at: Date;
+  closes_at: string;
 };

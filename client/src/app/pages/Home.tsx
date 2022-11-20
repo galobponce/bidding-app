@@ -1,8 +1,10 @@
 import { FC } from 'react';
+import { Center } from '@chakra-ui/react';
 
 import { AppLayout } from '../layout';
+import { ItemList } from '../components';
+import { Filters } from '../components/admin';
 import { useGlobalSelector } from '../../hooks';
-import { AdminView } from '../components/AdminView';
 
 
 export const Home: FC = () => {
@@ -12,15 +14,14 @@ export const Home: FC = () => {
   return (
     <AppLayout>
 
-      {
-        // If user is admin, sees the items table with CRUD and search bar
-        // If not, sees the gallery view to bid for items
-        isAdmin
-          ?
-          <AdminView />
-          :
-          <h1>Items Gallery</h1>
-      }
+      {/* If the user is admin, sees the filters and 'new item' button */}
+      <Center flexDir='column' gap='5'>
+
+        { isAdmin ? <Filters /> : null }
+        
+        <ItemList />
+        
+      </Center>
 
     </AppLayout>
   );

@@ -2,13 +2,13 @@ import { FC, KeyboardEvent } from 'react';
 import { SearchIcon, SmallCloseIcon } from '@chakra-ui/icons';
 import { InputGroup, Input, InputRightElement, IconButton } from '@chakra-ui/react';
 
-import { useForm, useGlobalDispatch } from '../../../hooks';
 import { setSearchFilter } from '../../../store/item';
+import { useForm, useGlobalDispatch } from '../../../hooks';
 
 
 export const SearchBar: FC = () => {
 
-  
+
   const dispatch = useGlobalDispatch();
 
 
@@ -57,6 +57,7 @@ export const SearchBar: FC = () => {
           onClick={handleClear}
         />
         <IconButton
+          mr='2rem'
           borderRadius='2xl'
           variant='solid'
           colorScheme='teal'

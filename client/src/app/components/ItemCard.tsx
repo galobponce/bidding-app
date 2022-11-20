@@ -20,13 +20,15 @@ export const ItemCard: FC<{ item: Item }> = ({ item }) => {
         <Text mt='2' fontSize='xl' fontWeight='bold' lineHeight='short'>
           {cutString(item.title, 30)}
         </Text>
-        <Text fontWeight='semibold' mt='2'>{item.last_bid_price ? `$${item.last_bid_price}` : 'No bids yet'}</Text>
         <Text mt='2'>{cutString(item.description, 100)}</Text>
       </Box>
-      <Button variant='solid' size='md' mt='5' colorScheme='teal' width='full'>
-        {isAdmin ? <EditIcon mr='2' /> : <ViewIcon mr='2' />}
-        {isAdmin ? 'Edit' : 'See More'}
-      </Button>
+      <Box>
+        <Text fontWeight='semibold' mt='2'>{item.last_bid_price ? `$${item.last_bid_price}` : 'No bids yet'}</Text>
+        <Button variant='outline' size='sm' mt='5' colorScheme='teal' width='full'>
+          {isAdmin ? <EditIcon mr='2' /> : <ViewIcon mr='2' />}
+          {isAdmin ? 'Edit' : 'See More'}
+        </Button>
+      </Box>
     </Flex>
   );
 };

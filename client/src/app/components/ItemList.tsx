@@ -35,8 +35,8 @@ export const ItemList: FC = () => {
     <SimpleGrid
       m='5'
       columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
-      columnGap='5'
-      rowGap='5'
+      columnGap='10'
+      rowGap='10'
     >
       {items.map((item) => (
         <ItemCard key={item.id} item={item} />

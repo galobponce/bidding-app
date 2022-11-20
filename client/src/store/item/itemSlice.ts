@@ -20,10 +20,6 @@ interface SetItemsPayload {
 }
 
 
-interface SelectItemPayload {
-  item: Item;
-}
-
 interface SetSearchFilterPayload {
   search: string;
 }
@@ -47,8 +43,8 @@ export const itemSlice = createSlice({
   name: 'item',
   initialState,
   reducers: {
-    setLoading: (state) => {
-      state.isLoading = true;
+    setLoading: (state, action: PayloadAction<boolean>) => {
+      state.isLoading = action.payload;
     },
     
     // Called on each paginate
@@ -57,11 +53,6 @@ export const itemSlice = createSlice({
       state.items = action.payload.items;
       state.page = action.payload.page;
       state.pages = action.payload.pages;
-    },
-
-
-    setSelectedItem: (state, action: PayloadAction<SelectItemPayload>) => {
-      state.selectedItem = action.payload.item;
     },
 
     setSearchFilter: (state, action: PayloadAction<SetSearchFilterPayload>) => {
@@ -74,4 +65,4 @@ export const itemSlice = createSlice({
   }
 });
 
-export const { setLoading, setItems, setSelectedItem, setSearchFilter, setOrderingFilter } = itemSlice.actions;
+export const { setLoading, setItems, setSearchFilter, setOrderingFilter } = itemSlice.actions;

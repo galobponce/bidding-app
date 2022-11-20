@@ -44,7 +44,7 @@ export const Paginator: FC = () => {
           // Create array of {pages} lenght and fill it with numbers from 1 to {pages}
           Array.from({ length: pages }, (_, i) => i + 1).map(number => {
             return (
-              <Button size='xs' onClick={() => goToSpecificPage(number)} backgroundColor={number === page ? 'teal.400' : 'initial'}>
+              <Button key={number} size='xs' onClick={() => goToSpecificPage(number)} backgroundColor={number === page ? 'teal.400' : 'initial'}>
                 {number}
               </Button>
             );

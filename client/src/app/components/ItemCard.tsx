@@ -22,7 +22,7 @@ export const ItemCard: FC<{ item: Item }> = ({ item }) => {
       <Flex minW='14rem' flexDir='column' justifyContent='space-between' p='5' borderRadius='lg' _dark={{ boxShadow: 'dark-lg' }} boxShadow='2xl'>
         <Box>
           <Text mt='2' fontSize='xl' fontWeight='bold' lineHeight='short'>
-            {cutString(item.title, 30)}
+            {item.title}
           </Text>
           <Text mt='2'>{cutString(item.description, 100)}</Text>
         </Box>

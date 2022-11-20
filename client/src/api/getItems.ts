@@ -1,11 +1,22 @@
 import { API_URL } from './config';
-import { Response } from '../common/types';
+import { Filters, Response } from '../common/types';
 
 
-export async function getItems(offset: number): Promise<Response> {
+export async function getItems(offset: number, filters: Filters): Promise<Response> {
   try {
-    const res = await fetch(`${API_URL}items/?offset=${offset}`);
+
+    let url = `${API_URL}items/?offset=${offset}`;
+
+    // Append filters to url
+    Object.keys(filters).map(filter => {
+      if (filters[filter]) {
+        url += `&${filter}=${filters[filter]}`
+      }
+    });
+
+    const res = await fetch(url);
     const items = await res.json();
+
     return {
       ok: true,
       ...items

@@ -21,7 +21,7 @@ export const startLoadingItems = (page: number, filters: Filters) => {
 
     if (!res.ok) {
       dispatch(generateToast({
-        title: `There was an fetching the items`,
+        title: `There was an error fetching the items`,
         status: 'error' 
       }));
       return;

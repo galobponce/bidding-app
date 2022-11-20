@@ -9,22 +9,22 @@ export const Toast: FC = () => {
   const chakraToast = useToast();
 
 
-  const toastState = useGlobalSelector((state) => state.toast);
+  const { toast } = useGlobalSelector((state) => state.toast);
 
 
   // Checks for changes in toast state
   useEffect(() => {
 
     // If there is a toast, renders it
-    if (!toastState.toast?.title) return;    
+    if (!toast) return;    
 
     chakraToast({
-      ...toastState.toast,
+      ...toast,
       isClosable: true,
       position: 'top-right'
     });
 
-  }, [toastState.toast]);
+  }, [toast]);
 
   
   return (<></>);

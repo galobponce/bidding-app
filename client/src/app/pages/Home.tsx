@@ -2,9 +2,9 @@ import { FC } from 'react';
 import { Center } from '@chakra-ui/react';
 
 import { AppLayout } from '../layout';
-import { ItemList } from '../components';
 import { Filters } from '../components/filters';
 import { useGlobalSelector } from '../../hooks';
+import { ItemList, Paginator } from '../components';
 
 
 export const Home: FC = () => {
@@ -20,6 +20,8 @@ export const Home: FC = () => {
         { isAdmin ? <Filters /> : null }
         
         <ItemList />
+
+        <Paginator />
         
       </Center>
 

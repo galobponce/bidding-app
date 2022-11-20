@@ -15,7 +15,7 @@ class ItemSerializer(serializers.ModelSerializer):
         """
         Checks that the new bid price must be higher than the current one
         """
-        if value <= self.instance.last_bid_price:
+        if self.instance and value <= self.instance.last_bid_price:
             raise serializers.ValidationError('New bid price must be higher than current one', code='invalid')
             
         return value
@@ -25,7 +25,7 @@ class ItemSerializer(serializers.ModelSerializer):
         """
         Checks if the user bidding is winning the auction
         """
-        if value == self.instance.last_bid_user:
+        if self.instance and value == self.instance.last_bid_user:
             raise serializers.ValidationError('You cant bid if you are winning the auction', code='invalid')
             
         return value

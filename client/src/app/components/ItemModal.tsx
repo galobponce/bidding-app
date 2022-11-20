@@ -113,7 +113,7 @@ export const ItemModal: FC<ItemModalInterface> = ({
       </FormControl>
       <FormControl mb='3'>
         <FormLabel>Close Date</FormLabel>
-        <Input type='datetime-local' name='closes_at' value={closes_at} onChange={onInputChange} readOnly={!isAdmin} />
+        <Input type='datetime-local' name='closes_at' step={1} value={closes_at} onChange={onInputChange} readOnly={!isAdmin} />
       </FormControl>
     </ItemModalLayout>
   );

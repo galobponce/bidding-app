@@ -1,3 +1,4 @@
+export * from './Timer';
 export * from './Navbar';
 export * from './ItemList';
 export * from './ItemCard';

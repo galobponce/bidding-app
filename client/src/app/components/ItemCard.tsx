@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { EditIcon, ViewIcon } from '@chakra-ui/icons';
 import { Box, Button, Flex, Text } from '@chakra-ui/react';
 
+import { Timer } from '.';
 import { cutString } from '../utils';
 import { Item } from '../../common/types';
 import { useGlobalSelector } from '../../hooks';
@@ -28,6 +29,7 @@ export const ItemCard: FC<{ item: Item }> = ({ item }) => {
           {isAdmin ? <EditIcon mr='2' /> : <ViewIcon mr='2' />}
           {isAdmin ? 'Edit' : 'See More'}
         </Button>
+        <Timer deadline={item.closes_at} />
       </Box>
     </Flex>
   );

@@ -8,7 +8,7 @@ import { useGlobalSelector } from '../../hooks';
  * The modal layout for item modal component
  */
 export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({ 
-  children, isAdmin, isOpen, canSave, onClose, onSave
+  children, newItem, isAdmin, isOpen, canSave, onClose, onSave
 }) => {
 
 
@@ -20,7 +20,7 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
       <ModalOverlay />
       <ModalContent mx='1rem'>
         <ModalHeader borderRadius='xl' zIndex='sticky' position='sticky' top='0'>
-          {isAdmin ? 'Edit' : 'View'} Item
+          {isAdmin ? (newItem ? 'New' : 'Edit') : 'View'} Item
           <ModalCloseButton tabIndex={-1} mt='1.5' />
         </ModalHeader>
         <ModalBody maxH='xl' overflowY='auto' boxShadow='inner'>
@@ -46,6 +46,7 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
 
 interface ItemModalLayoutInterface {
   children: JSX.Element | JSX.Element[];
+  newItem: boolean;
   isAdmin: boolean;
   isOpen: boolean;
   canSave: boolean;

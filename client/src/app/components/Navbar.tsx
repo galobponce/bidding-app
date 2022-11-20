@@ -1,8 +1,9 @@
 import { FC } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SunIcon, MoonIcon } from '@chakra-ui/icons'
-import { Center, Text, useColorMode, HStack, IconButton, useColorModeValue } from '@chakra-ui/react';
+import { Center, Text, useColorMode, HStack, IconButton, useColorModeValue, Tooltip } from '@chakra-ui/react';
 
+import { NewItemButton } from '.';
 import { appRoutes } from '../router';
 import { changeHtmlBackgroundColor } from '../utils';
 
@@ -34,13 +35,16 @@ export const Navbar: FC = () => {
         </Text>
       </Center>
       <HStack spacing='2'>
-        <IconButton
-          fontSize='xl'
-          aria-label='Toggle color mode'
-          variant='ghost'
-          onClick={onClickToggleColorMode}
-          icon={<SwitchIcon />}
-        />
+        <NewItemButton />
+        <Tooltip label="Toggle Color Mode"  aria-label='color mode tooltip'>
+          <IconButton
+            fontSize='xl'
+            aria-label='Toggle color mode'
+            variant='ghost'
+            onClick={onClickToggleColorMode}
+            icon={<SwitchIcon />}
+          />
+        </Tooltip>
       </HStack>
     </Center>
   );

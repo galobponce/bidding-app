@@ -1,13 +1,13 @@
 import { FC } from "react";
-import { Flex } from "@chakra-ui/react";
+import { Center } from "@chakra-ui/react";
 
-import { SearchBar } from './';
+import { Filters } from './';
 
 
 export const AdminView: FC = () => {
 	return (
-		<Flex>
-			<SearchBar />
-		</Flex>
+		<Center flexDir='column'>
+			<Filters />
+		</Center>
 	);
 };

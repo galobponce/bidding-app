@@ -3,7 +3,7 @@ import { Center } from '@chakra-ui/react';
 
 import { AppLayout } from '../layout';
 import { ItemList } from '../components';
-import { Filters } from '../components/admin';
+import { Filters } from '../components/filters';
 import { useGlobalSelector } from '../../hooks';
 
 

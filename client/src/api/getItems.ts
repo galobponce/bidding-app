@@ -7,12 +7,14 @@ export async function getItems(offset: number, filters: Filters): Promise<Respon
 
     let url = `${API_URL}items/?offset=${offset}`;
 
-    // Append filters to url
-    Object.keys(filters).map(filter => {
-      if (filters[filter]) {
-        url += `&${filter}=${filters[filter]}`
-      }
-    });
+    if (filters) {
+      // Append filters to url
+      Object.keys(filters).map(filter => {
+        if (filters[filter]) {
+          url += `&${filter}=${filters[filter]}`
+        }
+      });
+    }
 
     const res = await fetch(url);
     const items = await res.json();

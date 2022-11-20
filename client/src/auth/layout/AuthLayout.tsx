@@ -1,34 +1,25 @@
 import { FC } from 'react';
-import { Center, Grid, Text, useColorMode, Image } from '@chakra-ui/react';
+import { Center, Grid, Text, useColorMode } from '@chakra-ui/react';
 
 
-interface IAuthLayout  {
-  children: JSX.Element | JSX.Element[];
-  showBrand?: boolean;
-}
+export const AuthLayout: FC<{ children: JSX.Element | JSX.Element[]; }> = ({ children }) => {
+
+  
+  const { colorMode } = useColorMode();
 
 
-export const AuthLayout: FC<IAuthLayout> = ({ children, showBrand = true }) => {
   return (
     <Center flexDirection='column' h='80vh'>
-      {showBrand ? <Brand /> : null}
-      <Grid w='30vw' p='3' mb='7'>
+
+      <Grid mb='9'>
+        <Center>
+          <Text fontWeight='semibold' color={colorMode === 'dark' ? 'teal.400' : 'teal.500'} textAlign='center' fontSize='6xl'>Bidding App</Text>
+        </Center>
+      </Grid>
+      
+      <Grid p='3'>
         {children}
       </Grid>
     </Center>
-  );
-};
-
-
-const Brand: FC = () => {
-
-  const { colorMode } = useColorMode();
-
-  return (
-    <Grid mb='9'>
-      <Center>
-        <Text fontWeight='semibold' color={colorMode === 'dark' ? 'teal.400' : 'teal.500'} textAlign='center' fontSize='6xl'>Bidding App</Text>
-      </Center>
-    </Grid>
   );
 };

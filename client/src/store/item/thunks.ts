@@ -3,7 +3,7 @@ import type { Dispatch } from '@reduxjs/toolkit';
 import { generateToast } from '../toast';
 import { Filters, Item } from '../../common/types';
 import { setItems, setLoading } from './itemSlice';
-import { createItem, getItems, modifyItem } from '../../api';
+import { createItem, deleteItem, getItems, modifyItem } from '../../api';
 
 
 /**
@@ -86,6 +86,34 @@ export const startLoadingItems = (page: number, filters: Filters) => {
 
     dispatch(generateToast({
       title: `Successfully created`,
+      status: 'success' 
+    }));
+
+    dispatch(setLoading(false));
+  }
+}
+
+
+/**
+ * Deletes an item
+ * @param itemId id desired item to delete
+ */
+ export const startDeletingItem = (itemId: number) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(setLoading(true));
+
+    const res = await deleteItem(itemId);
+
+    if (!res.ok) {
+      dispatch(generateToast({
+        title: `There was an error deleting the item`,
+        status: 'error' 
+      }));
+      return;
+    }
+
+    dispatch(generateToast({
+      title: `Successfully deleted`,
       status: 'success' 
     }));
 

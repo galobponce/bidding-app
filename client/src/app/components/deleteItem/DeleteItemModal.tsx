@@ -23,7 +23,7 @@ export const DeleteItemModal: FC<DeleteModalInterface> = ({ itemId, isOpen, onCl
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} isCentered>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent mx='1rem'>
 
@@ -41,11 +41,11 @@ export const DeleteItemModal: FC<DeleteModalInterface> = ({ itemId, isOpen, onCl
           </AlertTitle>
         </Alert>
 
-        <ModalFooter justifyContent='center' bg='orange.500' _dark={{ bg: 'orange.200' }}>
-          <Button mr={3} onClick={onClose} colorScheme='whiteAlpha'>
+        <ModalFooter justifyContent='center' gap='3' bg='orange.500' _dark={{ bg: 'orange.200' }}>
+          <Button onClick={onClose} colorScheme='whiteAlpha'>
             Cancel
           </Button>
-          <Button colorScheme='red' _dark={{ bg: 'red.400', color: 'white' }} mr={3} onClick={handleDelete}>
+          <Button colorScheme='red' _dark={{ bg: 'red.400', color: 'white' }} onClick={handleDelete}>
             Delete
           </Button>
         </ModalFooter>

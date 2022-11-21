@@ -1,16 +1,20 @@
 import { FC } from 'react';
+import { MdLogout } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
-import { SunIcon, MoonIcon } from '@chakra-ui/icons'
+import { SunIcon, MoonIcon } from '@chakra-ui/icons';
 import { Center, Text, useColorMode, HStack, IconButton, useColorModeValue, Tooltip } from '@chakra-ui/react';
 
 import { appRoutes } from '../router';
 import { NewItemButton } from './itemDetail';
+import { startLogout } from '../../store/auth';
+import { useGlobalDispatch } from '../../hooks';
 import { changeHtmlBackgroundColor } from '../utils';
 
 
 export const Navbar: FC = () => {
 
   const navigate = useNavigate();
+  const dispatch = useGlobalDispatch()
   const SwitchIcon = useColorModeValue(MoonIcon, SunIcon);
   const { colorMode, toggleColorMode } = useColorMode();
 
@@ -43,6 +47,17 @@ export const Navbar: FC = () => {
             variant='ghost'
             onClick={onClickToggleColorMode}
             icon={<SwitchIcon />}
+          />
+        </Tooltip>
+        <Tooltip label="Log Out"  aria-label='log out tooltip'>
+          <IconButton
+            fontSize='xl'
+            aria-label='Lot Out'
+            variant='ghost'
+            color='red'
+            _dark={{ color: 'red.500' }}
+            onClick={() => dispatch(startLogout())}
+            icon={<MdLogout />}
           />
         </Tooltip>
       </HStack>

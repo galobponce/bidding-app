@@ -2,6 +2,7 @@ import { FC } from 'react';
 import { Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 
 import { useGlobalSelector } from '../../hooks';
+import { BidItemButton } from '../components/bidItem';
 import { DeleteItemButton } from '../components/deleteItem';
 
 
@@ -29,7 +30,7 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
           {children}
 
         </ModalBody>
-        <ModalFooter justifyContent='space-between'>
+        <ModalFooter justifyContent={isAdmin ? 'space-between' : 'end'}>
 
           {/* Can delete only if user is admin and there is an item */}
           {isAdmin && itemId && <DeleteItemButton itemId={itemId} variant='text' />}
@@ -42,6 +43,9 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
             {/* Can save only if user is admin */}
             {isAdmin && <Button colorScheme='blue' disabled={!canSave} onClick={onSave} isLoading={isLoading}>Save</Button>}
           </Box>
+
+          {/* Can bid only if user is not admin and there is an item */}
+          {!isAdmin && itemId && <BidItemButton itemId={itemId} />}
 
         </ModalFooter>
       </ModalContent>

@@ -2,8 +2,8 @@ import type { Dispatch } from '@reduxjs/toolkit';
 
 import { generateToast } from '../toast';
 import { Filters, Item } from '../../common/types';
-import { setItems, setLoading } from './itemSlice';
-import { createItem, deleteItem, getItems, modifyItem } from '../../api';
+import { setItems, setItemsLoading, setLoading } from './itemSlice';
+import { createItem, deleteItem, getItems, modifyItem, bidItem } from '../../api';
 
 
 /**
@@ -13,7 +13,7 @@ import { createItem, deleteItem, getItems, modifyItem } from '../../api';
  */
 export const startLoadingItems = (page: number, filters: Filters) => {
   return async (dispatch: Dispatch) => {
-    dispatch(setLoading(true));
+    dispatch(setItemsLoading(true));
 
     // Calculates offset based on asked page
     const offset = Number(`${page - 1}0`);
@@ -25,6 +25,7 @@ export const startLoadingItems = (page: number, filters: Filters) => {
         title: `There was an error fetching the items`,
         status: 'error' 
       }));
+      dispatch(setItemsLoading(false));
       return;
     }
 
@@ -53,6 +54,7 @@ export const startLoadingItems = (page: number, filters: Filters) => {
         title: `There was an error saving the item`,
         status: 'error' 
       }));
+      dispatch(setLoading(false));
       return;
     }
 
@@ -81,6 +83,7 @@ export const startLoadingItems = (page: number, filters: Filters) => {
         title: `There was an error saving the item`,
         status: 'error' 
       }));
+      dispatch(setLoading(false));
       return;
     }
 
@@ -109,6 +112,7 @@ export const startLoadingItems = (page: number, filters: Filters) => {
         title: `There was an error deleting the item`,
         status: 'error' 
       }));
+      dispatch(setLoading(false));
       return;
     }
 
@@ -118,5 +122,38 @@ export const startLoadingItems = (page: number, filters: Filters) => {
     }));
 
     dispatch(setLoading(false));
+  }
+}
+
+
+
+/**
+ * Bid an items
+ * @param itemId id desired item to bid
+ * @param userId current user id
+ * @param price bid price
+ */
+ export const startBidItem = (itemId: number, userId: number, price: number) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(setLoading(true));
+
+    const res = await bidItem(itemId, userId, price);
+
+    if (!res.ok) {
+      dispatch(generateToast({
+        title: res.error,
+        status: 'error' 
+      }));
+      dispatch(setLoading(false));
+      return false;
+    }
+
+    dispatch(generateToast({
+      title: `Successfully bidded`,
+      status: 'success' 
+    }));
+
+    dispatch(setLoading(false));
+    return true;
   }
 }

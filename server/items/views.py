@@ -35,7 +35,7 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
         if res.status_code == 200:
             # Sends event of updated item to client 
             send_event('items_updated', 'message', {
-                'updated_item': request.data
+                'updated_item': res.data
             })
 
         return res

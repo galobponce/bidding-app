@@ -1,28 +1,31 @@
 import { FC } from 'react';
 import { Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 
-import { useGlobalSelector } from '../../hooks';
+import { close } from '../../store/itemDetail';
 import { BidItemButton } from '../components/bidItem';
 import { DeleteItemButton } from '../components/deleteItem';
+import { useGlobalDispatch, useGlobalSelector } from '../../hooks';
 
 
 /**
  * The modal layout for item modal component
  */
 export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
-  children, itemId, isNew, isAdmin, isOpen, canSave, onClose, onSave
+  children, isNewItem, canSave, onSave
 }) => {
 
-
+  const dispatch = useGlobalDispatch();
+  const { isAdmin } = useGlobalSelector(state => state.auth);
   const { isLoading } = useGlobalSelector(state => state.item);
+  const { isOpen, selectedItem } = useGlobalSelector(state => state.itemDetail);
 
 
   return (
-    <Modal onClose={onClose} size='2xl' isOpen={isOpen}>
+    <Modal onClose={() => dispatch(close())} size='2xl' isOpen={isOpen}>
       <ModalOverlay />
       <ModalContent mx='1rem'>
         <ModalHeader borderRadius='xl' zIndex='sticky' position='sticky' top='0'>
-          {isAdmin ? (isNew ? 'New' : 'Edit') : 'View'} Item
+          {isAdmin ? (isNewItem ? 'New' : 'Edit') : 'View'} Item
           <ModalCloseButton tabIndex={-1} mt='1.5' />
         </ModalHeader>
         <ModalBody maxH='xl' overflowY='auto' boxShadow='inner'>
@@ -30,13 +33,13 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
           {children}
 
         </ModalBody>
-        <ModalFooter justifyContent={isAdmin ? 'space-between' : 'end'}>
+        <ModalFooter justifyContent={isAdmin ? (isNewItem ? 'end' : 'space-between') : 'end'}>
 
           {/* Can delete only if user is admin and there is an item */}
-          {isAdmin && itemId && <DeleteItemButton itemId={itemId} variant='text' />}
+          {isAdmin && selectedItem && <DeleteItemButton itemId={selectedItem.id} variant='text' />}
 
           <Box>
-            <Button mr={3} onClick={onClose}>
+            <Button mr={3} onClick={() => dispatch(close())}>
               Close
             </Button>
 
@@ -45,7 +48,7 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
           </Box>
 
           {/* Can bid only if user is not admin and there is an item */}
-          {!isAdmin && itemId && <BidItemButton itemId={itemId} />}
+          {!isAdmin && selectedItem && <BidItemButton itemId={selectedItem.id} />}
 
         </ModalFooter>
       </ModalContent>
@@ -57,11 +60,7 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
 
 interface ItemModalLayoutInterface {
   children: JSX.Element | JSX.Element[];
-  itemId: number;
-  isNew: boolean;
-  isAdmin: boolean;
-  isOpen: boolean;
+  isNewItem: boolean;
   canSave: boolean;
-  onClose: () => void;
   onSave: () => void;
 };

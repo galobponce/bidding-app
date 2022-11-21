@@ -3,35 +3,44 @@ import { FormControl, FormLabel, Input, InputGroup, InputLeftElement, Textarea }
 
 import { Item } from '../../../common/types';
 import { ItemModalLayout } from '../../layout';
+import { close } from '../../../store/itemDetail';
 import { getNewDateString, itemsAreDifferent } from '../../utils';
 import { useForm, useGlobalDispatch, useGlobalSelector } from '../../../hooks';
 import { startCreatingItem, startLoadingItems, startModifyingItem } from '../../../store/item';
 
 
 /**
- * Used for item detail view, item creation and item update.\
- * Pass item as null if want to use it for item creation
+ * Used for item detail view, item creation and item update.
  */
-export const ItemDetailModal: FC<ItemModalInterface> = ({
-  item, isOpen, onClose
-}) => {
-
+export const ItemDetailModal = () => {
 
   const dispatch = useGlobalDispatch();
   const [canSave, setCanSave] = useState(false);
   const { isAdmin } = useGlobalSelector(state => state.auth);
   const { page, filters } = useGlobalSelector(state => state.item);
+  const { selectedItem } = useGlobalSelector(state => state.itemDetail);
 
 
-  // Use item values if given
-  const { values, onInputChange } = useForm({
-    title: item ? item.title : '',
-    description: item ? item.description : '',
 
-    // || 0 to do not allow 'null' to crash the input
-    last_bid_price: item ? item.last_bid_price || 0 : 0,
+  // Listen for changes in global selected item and applies the view
+  useEffect(() => {
+    if (!selectedItem) { clearValues(); return; }
 
-    closes_at: item ? item.closes_at : getNewDateString()
+    setValues({
+      title: selectedItem.title,
+      description: selectedItem.description,
+      last_bid_price: selectedItem.last_bid_price,
+      closes_at: selectedItem.closes_at
+    });
+  }, [selectedItem]);
+
+
+
+  const { values, onInputChange, setValues, clearValues } = useForm({
+    title: '',
+    description: '',
+    last_bid_price: 0,
+    closes_at: getNewDateString()
   });
   const { title, description, last_bid_price, closes_at } = values;
 
@@ -41,7 +50,6 @@ export const ItemDetailModal: FC<ItemModalInterface> = ({
   // This for disabling the save when the item has not been changed or is not valid
   useEffect(() => {
 
-
     // Item Create and Update validation
     if (!title) { setCanSave(false); return; }
     if (title.length > 20) { setCanSave(false); return; }
@@ -50,8 +58,8 @@ export const ItemDetailModal: FC<ItemModalInterface> = ({
 
 
     // Item Update Validation specific
-    if (item) {
-      if (!itemsAreDifferent(item, { title, description, closes_at } as Item)) { setCanSave(false); return; }
+    if (selectedItem) {
+      if (!itemsAreDifferent(selectedItem, { title, description, closes_at } as Item)) { setCanSave(false); return; }
     }
 
     setCanSave(true);
@@ -64,7 +72,7 @@ export const ItemDetailModal: FC<ItemModalInterface> = ({
   const handleSave = async () => {
 
     const newItem: Item = {
-      id: item ? item.id : null,
+      id: selectedItem ? selectedItem.id : null,
       title: title,
       description: description,
       closes_at: closes_at
@@ -72,7 +80,7 @@ export const ItemDetailModal: FC<ItemModalInterface> = ({
 
 
     // If it is updating
-    if (item) {
+    if (selectedItem) {
       await dispatch(startModifyingItem(newItem));
     }
     // If it is creation
@@ -88,12 +96,12 @@ export const ItemDetailModal: FC<ItemModalInterface> = ({
     // Waits for saving and load items again to see the changes at the item list
     dispatch(startLoadingItems(page, filters));
 
-    onClose();
+    dispatch(close());
   };
 
 
   return (
-    <ItemModalLayout isOpen={isOpen} itemId={item && item.id} isNew={!item} isAdmin={isAdmin} canSave={canSave} onClose={onClose} onSave={handleSave} >
+    <ItemModalLayout isNewItem={!selectedItem} canSave={canSave} onSave={handleSave} >
       <FormControl mb='3'>
         <FormLabel>Title</FormLabel>
         <Input type='text' maxLength={20} name='title' value={title} onChange={onInputChange} readOnly={!isAdmin} />
@@ -103,14 +111,14 @@ export const ItemDetailModal: FC<ItemModalInterface> = ({
         <Textarea name='description' value={description} onChange={onInputChange} readOnly={!isAdmin} />
       </FormControl>
       <FormControl mb='3'>
-        <FormLabel>{!item ? 'Starting Price' : 'Last Bid Price'}</FormLabel>
+        <FormLabel>{!selectedItem ? 'Starting Price' : 'Last Bid Price'}</FormLabel>
         <InputGroup>
           <InputLeftElement
             pointerEvents='none'
             fontSize='1.2em'
             children='$'
           />
-        <Input type='number' name='last_bid_price' value={last_bid_price} onChange={onInputChange} disabled={!!item} />
+          <Input type='number' name='last_bid_price' value={last_bid_price} onChange={onInputChange} disabled={!!selectedItem} />
         </InputGroup>
       </FormControl>
       <FormControl mb='3'>
@@ -119,12 +127,4 @@ export const ItemDetailModal: FC<ItemModalInterface> = ({
       </FormControl>
     </ItemModalLayout>
   );
-};
-
-
-
-interface ItemModalInterface {
-  item: Item;
-  isOpen: boolean;
-  onClose: () => void;
 };

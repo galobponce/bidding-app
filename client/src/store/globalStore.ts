@@ -3,13 +3,15 @@ import { configureStore } from '@reduxjs/toolkit';
 import { authSlice } from './auth';
 import { itemSlice } from './item';
 import { toastSlice } from './toast';
+import { itemDetailSlice } from './itemDetail';
 
 
 export const globalStore = configureStore({
   reducer: {
     toast: toastSlice.reducer,
     auth: authSlice.reducer,
-    item: itemSlice.reducer
+    item: itemSlice.reducer,
+    itemDetail: itemDetailSlice.reducer
   }
 });
 

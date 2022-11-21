@@ -1,32 +1,35 @@
 import { FC } from 'react';
 import { EditIcon, ViewIcon } from '@chakra-ui/icons';
-import { Tooltip, IconButton, useDisclosure } from '@chakra-ui/react';
+import { Tooltip, IconButton } from '@chakra-ui/react';
 
-import { ItemDetailModal } from '.';
+
 import { Item } from '../../../common/types';
-import { useGlobalSelector } from '../../../hooks';
+import { open, setSelectedItem } from '../../../store/itemDetail';
+import { useGlobalDispatch, useGlobalSelector } from '../../../hooks';
 
 
 export const ItemDetailButton: FC<{ item: Item }> = ({ item }) => {
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const dispatch = useGlobalDispatch();
   const { isAdmin } = useGlobalSelector(state => state.auth);
 
   const text = isAdmin ? 'Edit Item' : 'View Item';
 
+  const handleOpen = () => {
+    dispatch(setSelectedItem(item));
+    dispatch(open());
+  };
+
   return (
-    <>
-      <ItemDetailModal item={item} isOpen={isOpen} onClose={onClose} />
-      <Tooltip label={text} aria-label={text + ' tooltip'}>
-        <IconButton
-          size='sm'
-          colorScheme='blue'
-          variant='ghost'
-          aria-label={text}
-          icon={isAdmin ? <EditIcon /> : <ViewIcon />}
-          onClick={onOpen}
-        />
-      </Tooltip>
-    </>
+    <Tooltip label={text} aria-label={text + ' tooltip'}>
+      <IconButton
+        size='sm'
+        colorScheme='blue'
+        variant='ghost'
+        aria-label={text}
+        icon={isAdmin ? <EditIcon /> : <ViewIcon />}
+        onClick={handleOpen}
+      />
+    </Tooltip>
   );
 };

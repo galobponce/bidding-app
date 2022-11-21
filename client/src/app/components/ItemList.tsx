@@ -12,7 +12,7 @@ export const ItemList: FC = () => {
 
 
   const dispatch = useGlobalDispatch();
-  const { items, filters, isLoading } = useGlobalSelector(state => state.item)
+  const { items, filters, itemsLoading } = useGlobalSelector(state => state.item)
 
 
   // When filters change, load items again
@@ -22,7 +22,7 @@ export const ItemList: FC = () => {
 
 
   // Shows loader when loading items
-  if (isLoading) {
+  if (itemsLoading) {
     return (
       <Center m='5'>
         <CircleLoader />

@@ -6,6 +6,7 @@ import { Filters, Item } from '../../common/types';
 interface ItemState {
   page: number;
   pages: number;
+  itemsLoading: boolean;
   isLoading: boolean;
   items: Item[];
   selectedItem: Item;
@@ -32,7 +33,8 @@ interface SetOrderingFilterPayload {
 const initialState: ItemState = {
   page: 1,
   pages: null,
-  isLoading: true,
+  itemsLoading: true,
+  isLoading: false,
   items: [],
   selectedItem: null,
   filters: null
@@ -43,13 +45,18 @@ export const itemSlice = createSlice({
   name: 'item',
   initialState,
   reducers: {
+
+    setItemsLoading: (state, action: PayloadAction<boolean>) => {
+      state.itemsLoading = action.payload;
+    },
+
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.isLoading = action.payload;
     },
     
     // Called on each paginate
     setItems: (state, action: PayloadAction<SetItemsPayload>) => {
-      state.isLoading = false;
+      state.itemsLoading = false;
       state.items = action.payload.items;
       state.page = action.payload.page;
       state.pages = action.payload.pages;
@@ -65,4 +72,4 @@ export const itemSlice = createSlice({
   }
 });
 
-export const { setLoading, setItems, setSearchFilter, setOrderingFilter } = itemSlice.actions;
+export const { setItemsLoading, setLoading, setItems, setSearchFilter, setOrderingFilter } = itemSlice.actions;

@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'rest_framework',
-    'items'
+    'items',
+    'django_eventstream',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -53,12 +55,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django_grip.GripMiddleware',
 ]
 
 # Only allowing from react vite client web server
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
 ]
+
+# Allows SSE from react vite client web server
+EVENTSTREAM_ALLOW_ORIGIN = 'http://localhost:5173'
 
 # Rest Framework settings
 REST_FRAMEWORK = {
@@ -87,6 +93,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'project.wsgi.application'
 
+ASGI_APPLICATION = 'project.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases

@@ -1,18 +1,18 @@
-import { ChangeEvent, FC, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { FormControl, FormLabel, Input, InputGroup, InputLeftElement, Textarea } from '@chakra-ui/react';
 
-import { Item } from '../../common/types';
-import { ItemModalLayout } from '../layout';
-import { getNewDateString, itemsAreDifferent } from '../utils';
-import { startCreatingItem, startLoadingItems, startModifyingItem } from '../../store/item';
-import { useForm, useGlobalDispatch, useGlobalSelector } from '../../hooks';
+import { Item } from '../../../common/types';
+import { ItemModalLayout } from '../../layout';
+import { getNewDateString, itemsAreDifferent } from '../../utils';
+import { useForm, useGlobalDispatch, useGlobalSelector } from '../../../hooks';
+import { startCreatingItem, startLoadingItems, startModifyingItem } from '../../../store/item';
 
 
 /**
  * Used for item detail view, item creation and item update.\
  * Pass item as null if want to use it for item creation
  */
-export const ItemModal: FC<ItemModalInterface> = ({
+export const ItemDetailModal: FC<ItemModalInterface> = ({
   item, isOpen, onClose
 }) => {
 
@@ -87,6 +87,8 @@ export const ItemModal: FC<ItemModalInterface> = ({
 
     // Waits for saving and load items again to see the changes at the item list
     dispatch(startLoadingItems(page, filters));
+
+    onClose();
   };
 
 

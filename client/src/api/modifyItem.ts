@@ -12,7 +12,7 @@ export async function modifyItem(item: Item) {
     body.append('closes_at', item.closes_at);
 
     const res = await fetch(`${API_URL}items/${item.id}/`, { 
-      method: 'PUT',
+      method: 'PATCH',
       body
     });
     

@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { SunIcon, MoonIcon } from '@chakra-ui/icons'
 import { Center, Text, useColorMode, HStack, IconButton, useColorModeValue, Tooltip } from '@chakra-ui/react';
 
-import { NewItemButton } from '.';
 import { appRoutes } from '../router';
+import { NewItemButton } from './itemDetail';
 import { changeHtmlBackgroundColor } from '../utils';
 
 

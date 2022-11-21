@@ -17,7 +17,7 @@ export const ItemList: FC = () => {
 
   // When filters change, load items again
   useEffect(() => {
-    dispatch(startLoadingItems(1, filters));
+    dispatch(startLoadingItems(1, filters));    
   }, [filters])
 
 
@@ -34,7 +34,7 @@ export const ItemList: FC = () => {
   return (
     <SimpleGrid
       m='5'
-      columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
+      columns={{ base: 1, md: 2, lg: 3, xl: 4 }}
       columnGap='10'
       rowGap='10'
     >

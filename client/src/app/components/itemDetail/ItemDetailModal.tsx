@@ -93,7 +93,7 @@ export const ItemDetailModal: FC<ItemModalInterface> = ({
 
 
   return (
-    <ItemModalLayout isOpen={isOpen} newItem={!item} isAdmin={isAdmin} canSave={canSave} onClose={onClose} onSave={handleSave} >
+    <ItemModalLayout isOpen={isOpen} itemId={item && item.id} isNew={!item} isAdmin={isAdmin} canSave={canSave} onClose={onClose} onSave={handleSave} >
       <FormControl mb='3'>
         <FormLabel>Title</FormLabel>
         <Input type='text' maxLength={20} name='title' value={title} onChange={onInputChange} readOnly={!isAdmin} />

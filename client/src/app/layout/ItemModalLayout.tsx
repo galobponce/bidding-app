@@ -1,14 +1,15 @@
 import { FC } from 'react';
-import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
+import { Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 
 import { useGlobalSelector } from '../../hooks';
+import { DeleteItemButton } from '../components/deleteItem';
 
 
 /**
  * The modal layout for item modal component
  */
-export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({ 
-  children, newItem, isAdmin, isOpen, canSave, onClose, onSave
+export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
+  children, itemId, isNew, isAdmin, isOpen, canSave, onClose, onSave
 }) => {
 
 
@@ -20,7 +21,7 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
       <ModalOverlay />
       <ModalContent mx='1rem'>
         <ModalHeader borderRadius='xl' zIndex='sticky' position='sticky' top='0'>
-          {isAdmin ? (newItem ? 'New' : 'Edit') : 'View'} Item
+          {isAdmin ? (isNew ? 'New' : 'Edit') : 'View'} Item
           <ModalCloseButton tabIndex={-1} mt='1.5' />
         </ModalHeader>
         <ModalBody maxH='xl' overflowY='auto' boxShadow='inner'>
@@ -28,13 +29,19 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
           {children}
 
         </ModalBody>
-        <ModalFooter>
-          <Button mr={3} onClick={onClose}>
-            Close
-          </Button>
+        <ModalFooter justifyContent='space-between'>
 
-          {/* Can save only if user is admin */}
-          {isAdmin ? <Button colorScheme='blue' disabled={!canSave} onClick={onSave} isLoading={isLoading}>Save</Button> : null}
+          {/* Can delete only if user is admin and there is an item */}
+          {isAdmin && itemId && <DeleteItemButton itemId={itemId} variant='text' />}
+
+          <Box>
+            <Button mr={3} onClick={onClose}>
+              Close
+            </Button>
+
+            {/* Can save only if user is admin */}
+            {isAdmin && <Button colorScheme='blue' disabled={!canSave} onClick={onSave} isLoading={isLoading}>Save</Button>}
+          </Box>
 
         </ModalFooter>
       </ModalContent>
@@ -46,7 +53,8 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
 
 interface ItemModalLayoutInterface {
   children: JSX.Element | JSX.Element[];
-  newItem: boolean;
+  itemId: number;
+  isNew: boolean;
   isAdmin: boolean;
   isOpen: boolean;
   canSave: boolean;

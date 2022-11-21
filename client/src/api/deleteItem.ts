@@ -4,7 +4,7 @@ import { API_URL } from './config';
 export async function deleteItem(itemId: number) {
   try {
 
-    const res = await fetch(`${API_URL}items/${itemId}/`, { 
+    await fetch(`${API_URL}items/${itemId}/`, { 
       method: 'DELETE'
     });
 

@@ -62,6 +62,10 @@ export const itemSlice = createSlice({
       state.pages = action.payload.pages;
     },
 
+    updateItem: (state, action: PayloadAction<{ item: Item, idx: number }>) => {
+      state.items[action.payload.idx] = action.payload.item;
+    },
+
     setSearchFilter: (state, action: PayloadAction<SetSearchFilterPayload>) => {
       state.filters = { ...state.filters, ...action.payload };
     },
@@ -72,4 +76,4 @@ export const itemSlice = createSlice({
   }
 });
 
-export const { setItemsLoading, setLoading, setItems, setSearchFilter, setOrderingFilter } = itemSlice.actions;
+export const { setItemsLoading, setLoading, setItems, updateItem, setSearchFilter, setOrderingFilter } = itemSlice.actions;

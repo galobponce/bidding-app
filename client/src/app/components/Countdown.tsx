@@ -66,7 +66,7 @@ export const Countdown: FC<{ item: Item }> = ({ item }) => {
   
   if (item && item.closed) {
     return (
-    <Text mt='2' textAlign='center' color='red'>Closed</Text>
+    <Text mt='2' textAlign='center' color='red' _dark={{ color: 'red.500' }}>Closed</Text>
     );
   }
 

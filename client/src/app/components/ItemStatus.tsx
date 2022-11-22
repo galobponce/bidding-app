@@ -5,7 +5,7 @@ import { Item } from '../../common/types';
 import { useGlobalSelector } from '../../hooks';
 
 
-export const ItemStatus: FC<{ item: Item, variant?: 'card' | 'modal-header' }> = ({ item, variant = 'card' }) => {
+export const ItemStatus: FC<{ item: Item }> = ({ item }) => {
 
 
   const [closed, setClosed] = useState(false);

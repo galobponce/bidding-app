@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { Box, Flex, FormControl, FormLabel, Input, InputGroup, InputLeftElement, Textarea } from '@chakra-ui/react';
+import { Box, Checkbox, Flex, FormControl, FormLabel, Input, InputGroup, InputLeftElement, Textarea } from '@chakra-ui/react';
 
 import { Countdown } from '../Countdown';
 import { Item } from '../../../common/types';
@@ -13,7 +13,7 @@ import { startCreatingItem, startLoadingItems, startModifyingItem } from '../../
 /**
  * Used for item detail view, item creation and item update.
  */
-export const ItemDetailModal = () => {
+export const ItemDetailModal: FC = () => {
 
   const dispatch = useGlobalDispatch();
   const [canSave, setCanSave] = useState(false);
@@ -107,11 +107,11 @@ export const ItemDetailModal = () => {
     <ItemModalLayout isNewItem={!selectedItem} canSave={canSave} onSave={handleSave} >
       <FormControl mb='3'>
         <FormLabel>Title</FormLabel>
-        <Input type='text' maxLength={20} name='title' value={title} onChange={onInputChange} readOnly={!isAdmin} />
+        <Input type='text' maxLength={20} name='title' value={title} onChange={onInputChange} readOnly={!isAdmin || selectedItem?.closed} />
       </FormControl>
       <FormControl mb='3'>
         <FormLabel>Description</FormLabel>
-        <Textarea name='description' value={description} onChange={onInputChange} readOnly={!isAdmin} />
+        <Textarea name='description' value={description} onChange={onInputChange} readOnly={!isAdmin || selectedItem?.closed} />
       </FormControl>
       <Flex gap='3' mb='3' flexDirection={{ base: 'column', sm: 'row' }}>
         <FormControl>
@@ -135,7 +135,7 @@ export const ItemDetailModal = () => {
         (
           <FormControl mb='3'>
             <FormLabel>Close Date</FormLabel>
-            <Input type='datetime-local' name='closes_at' step={1} value={closes_at} onChange={onInputChange} readOnly={!isAdmin} />
+            <Input type='datetime-local' name='closes_at' step={1} value={closes_at} onChange={onInputChange} readOnly={!isAdmin || selectedItem?.closed} />
           </FormControl>
         ) : (
           <Box mt='10'>

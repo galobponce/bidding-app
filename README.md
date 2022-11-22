@@ -13,6 +13,7 @@ A web auction application for bidding on antique items.
     - Normal users can bid for items.
     - Items update (for example a bid, or a change from an Admin) are real time updated in all clients via.
     - Normal users can use the auto bid feature to automatically bid (price + 1) for an item when another user bids.
+    - Simple pagination for item gallery.
     - Light and Dark Mode.
     - Fully responsive design.
 

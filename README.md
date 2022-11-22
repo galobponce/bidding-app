@@ -4,11 +4,25 @@
 
 A web auction application for bidding on antique items.
 
+# :unlock: Functionalities:
+    - Dummy user authentication with users stored in json at client.
+    - Admin and normal users.
+    - Admins can create, edit and delete items.
+    - Admins can filter through items by title and description.
+    - Admins can order items by close date and price.
+    - Normal users can bid for items.
+    - Items update (for example a bid, or a change from an Admin) are real time updated in all clients via.
+    - Normal users can use the auto bid feature to automatically bid (price + 1) for an item when another user bids.
+    - Light and Dark Mode.
+    - Fully responsive design.
+
 # :wrench: Built with:
 
 Front End is built in [React](https://reactjs.org) with [Typescript](https://www.typescriptlang.org) and styled with [ChakraUI](https://chakra-ui.com).
 
 Back End is built in [Django Rest Framework](https://www.django-rest-framework.org) with Python.
+
+Real time updating is made with [Server Side Events](https://en.wikipedia.org/wiki/Server-sent_events) using [Django EventStream](https://github.com/fanout/django-eventstream) and [Django Channels](https://channels.readthedocs.io/en/stable/).
 
 # :eyes: Requirements:
 

@@ -12,12 +12,12 @@ import './index.css';
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <Provider store={globalStore}>
       <ChakraProvider theme={theme}>
         <Toast />
         <GlobalRouter />
       </ChakraProvider>  
     </Provider>
-  </React.StrictMode>
+  // </React.StrictMode>
 );

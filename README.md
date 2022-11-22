@@ -54,3 +54,10 @@ A [python](https://www.python.org) enviroment (Python 3.9).
 3. Run `npm run dev`.
 
 4. Go to `http://localhost:3000` in your browser.
+
+
+# :warning: DISCLAIMER:
+
+By now, the auto bid feature is not set with a limit, so when the user sets to start auto bid an item, the auto bid will be made on every bid of other user, without price limit.
+
+In the future, the user will be able to configure the auto bid with an price limit.

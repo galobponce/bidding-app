@@ -3,7 +3,6 @@ from .models import Item
 from rest_framework import filters
 from rest_framework import generics
 from autobids.models import AutoBid
-from .utils import getJsonFromObject
 from rest_framework import permissions
 from .serializers import ItemSerializer
 from django_eventstream import send_event
@@ -39,7 +38,8 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
         """
         old_item = self.get_object()
         new_item = serializer.save()
-        send_event("items_updated", "message", {"updated_item": getJsonFromObject(new_item)})
+
+        send_event("items_updated", "message", { "updated_item": serializer.data })
 
         # If the change was a bid
         if (old_item.last_bid_user == new_item.last_bid_user or old_item.last_bid_price >= new_item.last_bid_price):
@@ -53,7 +53,13 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
             if autobid['user'] == new_item.last_bid_user:
                 continue
 
-            # Sets the price + 1 and the user 
+            # Sets the price + 1 and updates the user
             Item.objects.filter(pk=new_item.id).update(last_bid_price=new_item.last_bid_price+1, last_bid_user=autobid['user'])
+
+            auto_bid_item_qs = Item.objects.filter(pk=new_item.id).values()
+
+            # Sends change to client
+            for auto_bid_item in auto_bid_item_qs:
+                send_event("items_updated", "message", { "updated_item": auto_bid_item })
             
             

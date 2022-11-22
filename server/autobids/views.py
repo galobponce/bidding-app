@@ -13,6 +13,17 @@ class AutoBidListCreateView(generics.ListCreateAPIView):
     serializer_class = AutoBidSerializer
     pagination_class = None
 
+    def get_queryset(self):
+        
+        # If item and user passed, return filtered 
+        item_param = self.request.query_params.get('item', None)
+        user_param = self.request.query_params.get('user', None)
+
+        if item_param and user_param:
+            return AutoBid.objects.filter(item=item_param, user=user_param)
+            
+        return super().get_queryset()
+
 
 class AutoBidDeleteView(generics.DestroyAPIView):
     """

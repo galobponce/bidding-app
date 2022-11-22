@@ -1,10 +1,12 @@
 import { FC } from 'react';
 import { Modal, ModalOverlay, ModalContent, ModalFooter, Button, FormControl, FormLabel, Input, InputGroup, InputLeftElement, ModalBody, ModalHeader, ModalCloseButton, FormHelperText } from '@chakra-ui/react';
-import { useForm, useGlobalDispatch, useGlobalSelector } from '../../../hooks';
+
+import { Item } from '../../../common/types';
 import { startBidItem } from '../../../store/item';
+import { useForm, useGlobalDispatch, useGlobalSelector } from '../../../hooks';
 
 
-export const BidItemModal: FC<BidItemModalInterface> = ({ itemId, isOpen, onClose }) => {
+export const BidItemModal: FC<BidItemModalInterface> = ({ item, isOpen, onClose }) => {
 
 
   const dispatch = useGlobalDispatch();
@@ -13,14 +15,14 @@ export const BidItemModal: FC<BidItemModalInterface> = ({ itemId, isOpen, onClos
 
 
   const { values, onInputChange } = useForm({
-    price: 1,
+    price: item.last_bid_price,
   });
   const { price } = values;
 
 
   const handleSubmit = async () => {
 
-    const success = await dispatch(startBidItem(itemId, Number(uid), price));
+    const success = await dispatch(startBidItem(item.id, Number(uid), price));
 
     // If it was successfully bided, closes the modal
     if (success) onClose();
@@ -46,7 +48,7 @@ export const BidItemModal: FC<BidItemModalInterface> = ({ itemId, isOpen, onClos
                 fontSize='1.2em'
                 children='$'
               />
-              <Input type='number' name='price' value={price} onChange={onInputChange} />
+              <Input type='number' name='price' min={item.last_bid_price} value={price} onChange={onInputChange} />
             </InputGroup>
             <FormHelperText>The price must be higher than the last bid price.</FormHelperText>
           </FormControl>
@@ -70,7 +72,7 @@ export const BidItemModal: FC<BidItemModalInterface> = ({ itemId, isOpen, onClos
 
 
 interface BidItemModalInterface {
-  itemId: number;
+  item: Item;
   isOpen: boolean;
   onClose: () => void;
 };

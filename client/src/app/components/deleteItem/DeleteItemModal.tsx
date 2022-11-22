@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { Modal, ModalOverlay, ModalContent, ModalFooter, Button, Alert, AlertIcon, AlertTitle } from '@chakra-ui/react';
 
+import { close } from '../../../store/itemDetail';
 import { useGlobalDispatch, useGlobalSelector } from '../../../hooks';
 import { startDeletingItem, startLoadingItems } from '../../../store/item';
 
@@ -20,6 +21,8 @@ export const DeleteItemModal: FC<DeleteModalInterface> = ({ itemId, isOpen, onCl
     await dispatch(startDeletingItem(itemId));
 
     dispatch(startLoadingItems(page, filters));
+
+    dispatch(close());
   };
 
   return (

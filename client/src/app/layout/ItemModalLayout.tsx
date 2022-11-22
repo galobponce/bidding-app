@@ -33,7 +33,7 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
 
 
   const handleAutoBidClick = () => {
-    if (selectedItem.using_auto_bid) {
+    if (selectedItem?.using_auto_bid) {
       dispatch(startDeleteAutoBid(selectedItem.id, Number(uid)));
     } else {
       dispatch(startCreateAutoBid(selectedItem, Number(uid)));
@@ -68,7 +68,7 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
 
           {/* Can delete only if user is admin and there is an item */}
           {!isAdmin && selectedItem &&
-            <Button colorScheme='yellow' onClick={handleAutoBidClick} disabled={selectedItem.closed} isLoading={isLoading}>
+            <Button colorScheme='yellow' onClick={handleAutoBidClick} disabled={selectedItem?.closed} isLoading={isLoading}>
               {selectedItem.using_auto_bid ? 'Stop Auto Bid' : 'Start Auto Bid'}
             </Button>
           }
@@ -82,7 +82,7 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
             </Button>
 
             {/* Can save only if user is admin and item is not closed */}
-            {isAdmin && <Button colorScheme='blue' disabled={!canSave || selectedItem.closed} onClick={onSave} isLoading={isLoading}>Save</Button>}
+            {isAdmin && <Button colorScheme='blue' disabled={!canSave || selectedItem?.closed} onClick={onSave} isLoading={isLoading}>Save</Button>}
 
             {/* Can bid only if user is not admin and there is an item */}
             {!isAdmin && selectedItem && <BidItemButton item={selectedItem} disabled={!canBid} />}

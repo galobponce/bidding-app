@@ -11,8 +11,8 @@ export async function createAutoBid(itemId: number, uid: number) {
       method: 'POST',
       body
     });
-
-    const resJSON = res.json();
+    
+    const resJSON = await res.json();
 
     if (!res.ok) {
       Object.keys(resJSON).map(error => {

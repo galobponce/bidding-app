@@ -4,6 +4,10 @@
 
 A web auction application for bidding on antique items.
 
+
+<br/>
+
+
 # :unlock: Functionalities:
     - Dummy user authentication with users stored in json at client.
     - Admin and normal users.
@@ -17,6 +21,10 @@ A web auction application for bidding on antique items.
     - Light and Dark Mode.
     - Fully responsive design.
 
+
+<br/>
+
+
 # :wrench: Built with:
 
 Front End is built in [React](https://reactjs.org) with [Typescript](https://www.typescriptlang.org) and styled with [ChakraUI](https://chakra-ui.com).
@@ -25,11 +33,19 @@ Back End is built in [Django Rest Framework](https://www.django-rest-framework.o
 
 Real time updating is made with [Server Side Events](https://en.wikipedia.org/wiki/Server-sent_events) using [Django EventStream](https://github.com/fanout/django-eventstream) and [Django Channels](https://channels.readthedocs.io/en/stable/).
 
+
+<br/>
+
+
 # :eyes: Requirements:
 
 A [node](https://nodejs.org/) enviroment (Node 19).
 
 A [python](https://www.python.org) enviroment (Python 3.9).
+
+
+<br/>
+
 
 # :question: Local Deploy (back end):
 
@@ -45,6 +61,10 @@ A [python](https://www.python.org) enviroment (Python 3.9).
 
 6. Run `python manage.py runserver`.
 
+
+<br/>
+
+
 # :question: Local Deploy (front end):
 
 1. Navigate to `client/` folder with your terminal.
@@ -53,7 +73,10 @@ A [python](https://www.python.org) enviroment (Python 3.9).
 
 3. Run `npm run dev`.
 
-4. Go to `http://localhost:3000` in your browser.
+4. Go to `http://localhost:5173` in your browser.
+
+
+<br/>
 
 
 # :warning: DISCLAIMER:

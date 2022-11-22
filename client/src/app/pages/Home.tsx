@@ -7,7 +7,7 @@ import { updateItem } from '../../store/item';
 import { Filters } from '../components/filters';
 import { ItemList, Paginator } from '../components';
 import { getUserFromUid } from '../../auth/utils';
-import { setSelectedItem } from '../../store/itemDetail';
+import { startSelectItem } from '../../store/itemDetail';
 import { useGlobalDispatch, useGlobalSelector } from '../../hooks';
 
 
@@ -52,7 +52,7 @@ export const Home: FC = () => {
 
       // Updates the selected item if its the same
       // But, does not update when user is admin because he could be making changes
-      if (!isAdmin && selectedItem && selectedItem.id == updated_item.id) dispatch(setSelectedItem(updated_item));
+      if (!isAdmin && selectedItem && selectedItem.id == updated_item.id) dispatch(startSelectItem(updated_item));
 
     }
   }, [items, selectedItem]);

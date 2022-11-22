@@ -1,6 +1,7 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 
+import { ItemStatus } from '../components';
 import { close } from '../../store/itemDetail';
 import { BidItemButton } from '../components/bidItem';
 import { DeleteItemButton } from '../components/deleteItem';
@@ -15,18 +16,38 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
 }) => {
 
   const dispatch = useGlobalDispatch();
-  const { isAdmin } = useGlobalSelector(state => state.auth);
+  const [canBid, setCanBid] = useState(false);
+  const { uid, isAdmin } = useGlobalSelector(state => state.auth);
   const { isLoading } = useGlobalSelector(state => state.item);
   const { isOpen, selectedItem } = useGlobalSelector(state => state.itemDetail);
 
 
+  useEffect(() => {
+    if (!selectedItem) return;
+
+    // Only can bid if item is not closed and user is not winning
+    if (!selectedItem.closed && selectedItem.last_bid_user != Number(uid)) setCanBid(true);
+
+  }, [selectedItem]);
+
+
   return (
-    <Modal onClose={() => dispatch(close())} size='2xl' isOpen={isOpen}>
+    <Modal onClose={() => dispatch(close())} size='2xl' isOpen={isOpen} isCentered>
       <ModalOverlay />
       <ModalContent mx='1rem'>
         <ModalHeader borderRadius='xl' zIndex='sticky' position='sticky' top='0'>
           {isAdmin ? (isNewItem ? 'New' : 'Edit') : 'View'} Item
+
+          {!isAdmin &&
+            (
+              <Box as='span' ml='3'>
+                <ItemStatus item={selectedItem} />
+              </Box>
+            )
+          }
+
           <ModalCloseButton tabIndex={-1} mt='1.5' />
+
         </ModalHeader>
         <ModalBody maxH='xl' overflowY='auto' boxShadow='inner'>
 
@@ -48,7 +69,7 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
           </Box>
 
           {/* Can bid only if user is not admin and there is an item */}
-          {!isAdmin && selectedItem && <BidItemButton itemId={selectedItem.id} />}
+          {!isAdmin && selectedItem && <BidItemButton itemId={selectedItem.id} disabled={!canBid} />}
 
         </ModalFooter>
       </ModalContent>

@@ -10,3 +10,6 @@ class Item(models.Model):
 
     class Meta:
         ordering = ['closes_at']
+
+    def __str__(self) -> str:
+        return self.title

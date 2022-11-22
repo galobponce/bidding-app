@@ -40,9 +40,10 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
     'rest_framework',
-    'items',
     'django_eventstream',
     'channels',
+    'items',
+    'autobids',
 ]
 
 MIDDLEWARE = [

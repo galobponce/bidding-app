@@ -1,4 +1,5 @@
 from .models import Item
+from datetime import datetime
 from rest_framework import serializers
 
 
@@ -9,6 +10,14 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ['id', 'title', 'description', 'last_bid_user', 'last_bid_price', 'closes_at']
+
+    def validate(self, attrs):
+
+        # Does not allow to edit a closed item
+        if self.instance and self.instance.closes_at < datetime.today().replace(tzinfo=None):
+            raise serializers.ValidationError('Closed items are not updatable', code='invalid')
+
+        return super().validate(attrs)
 
 
     def validate_last_bid_price(self, value):

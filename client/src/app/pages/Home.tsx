@@ -6,6 +6,7 @@ import { API_URL } from '../../api/config';
 import { updateItem } from '../../store/item';
 import { Filters } from '../components/filters';
 import { ItemList, Paginator } from '../components';
+import { getUserFromUid } from '../../auth/utils';
 import { setSelectedItem } from '../../store/itemDetail';
 import { useGlobalDispatch, useGlobalSelector } from '../../hooks';
 
@@ -28,27 +29,26 @@ export const Home: FC = () => {
   }, []);
 
   useEffect(() => {
-    sse.current.onmessage = (ev) => {
+    sse.current.onmessage = async (ev) => {
 
       const { data } = ev;
       const { updated_item } = JSON.parse(data);
       
       if (!updated_item) return;    
       
-      // If the item updated is in current page
-      let idx = -1;
-
-      const found = !!items.find((item, index) => {
-        if (item.id == updated_item.id) {
-          idx = index;
-          return item;
-        }
-      });
+      
+      // If the item is in the current page
+      const found = !!items.find(item => item.id == updated_item.id);
 
       if (!found) return;
 
+      // If there is a user, updates the virtual property username
+      if (updated_item.last_bid_user) {
+        updated_item['last_bid_username'] = (await getUserFromUid(updated_item.last_bid_user)).username;
+      }
+
       // Updates the array of items
-      dispatch(updateItem({ item: updated_item, idx }));
+      dispatch(updateItem({ item: updated_item }));
 
       // Updates the selected item if its the same
       // But, does not update when user is admin because he could be making changes

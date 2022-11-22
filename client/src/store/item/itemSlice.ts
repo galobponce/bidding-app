@@ -62,8 +62,18 @@ export const itemSlice = createSlice({
       state.pages = action.payload.pages;
     },
 
-    updateItem: (state, action: PayloadAction<{ item: Item, idx: number }>) => {
-      state.items[action.payload.idx] = action.payload.item;
+    updateItem: (state, action: PayloadAction<{ item: Item }>) => {
+
+      let idx = -1;
+
+      // Gets the item index
+      if (idx === -1) {
+        state.items.map((itemPage, index) => {
+          if (itemPage.id == action.payload.item.id) idx = index;
+        });
+      }      
+
+      state.items[idx] = action.payload.item;
     },
 
     setSearchFilter: (state, action: PayloadAction<SetSearchFilterPayload>) => {

@@ -4,7 +4,7 @@ import { Tooltip, IconButton } from '@chakra-ui/react';
 
 
 import { Item } from '../../../common/types';
-import { open, setSelectedItem } from '../../../store/itemDetail';
+import { open, startSelectItem } from '../../../store/itemDetail';
 import { useGlobalDispatch, useGlobalSelector } from '../../../hooks';
 
 
@@ -16,7 +16,7 @@ export const ItemDetailButton: FC<{ item: Item }> = ({ item }) => {
   const text = isAdmin ? 'Edit Item' : 'View Item';
 
   const handleOpen = () => {
-    dispatch(setSelectedItem(item));
+    dispatch(startSelectItem(item));
     dispatch(open());
   };
 

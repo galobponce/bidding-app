@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
-import { FormControl, FormLabel, Input, InputGroup, InputLeftElement, Textarea } from '@chakra-ui/react';
+import { Box, Flex, FormControl, FormLabel, Input, InputGroup, InputLeftElement, Textarea } from '@chakra-ui/react';
 
+import { Countdown } from '../Countdown';
 import { Item } from '../../../common/types';
 import { ItemModalLayout } from '../../layout';
 import { close } from '../../../store/itemDetail';
@@ -30,6 +31,7 @@ export const ItemDetailModal = () => {
       title: selectedItem.title,
       description: selectedItem.description,
       last_bid_price: selectedItem.last_bid_price,
+      last_bid_username: selectedItem.last_bid_username,
       closes_at: selectedItem.closes_at
     });
   }, [selectedItem]);
@@ -40,9 +42,10 @@ export const ItemDetailModal = () => {
     title: '',
     description: '',
     last_bid_price: 0,
+    last_bid_username: '',
     closes_at: getNewDateString()
   });
-  const { title, description, last_bid_price, closes_at } = values;
+  const { title, description, last_bid_price, last_bid_username, closes_at } = values;
 
 
 
@@ -110,21 +113,37 @@ export const ItemDetailModal = () => {
         <FormLabel>Description</FormLabel>
         <Textarea name='description' value={description} onChange={onInputChange} readOnly={!isAdmin} />
       </FormControl>
-      <FormControl mb='3'>
-        <FormLabel>{!selectedItem ? 'Starting Price' : 'Last Bid Price'}</FormLabel>
-        <InputGroup>
-          <InputLeftElement
-            pointerEvents='none'
-            fontSize='1.2em'
-            children='$'
-          />
-          <Input type='number' name='last_bid_price' value={last_bid_price} onChange={onInputChange} disabled={!!selectedItem} />
-        </InputGroup>
-      </FormControl>
-      <FormControl mb='3'>
-        <FormLabel>Close Date</FormLabel>
-        <Input type='datetime-local' name='closes_at' step={1} value={closes_at} onChange={onInputChange} readOnly={!isAdmin} />
-      </FormControl>
+      <Flex gap='3' mb='3' flexDirection={{ base: 'column', sm: 'row' }}>
+        <FormControl>
+          <FormLabel>Last Bid User</FormLabel>
+          <Input type='text' name='last_bid_username' value={last_bid_username} disabled />
+        </FormControl>
+        <FormControl>
+          <FormLabel>{!selectedItem || !selectedItem?.last_bid_user ? 'Starting Price' : 'Last Bid Price'}</FormLabel>
+          <InputGroup>
+            <InputLeftElement
+              pointerEvents='none'
+              fontSize='1.2em'
+              children='$'
+            />
+            <Input type='number' name='last_bid_price' value={last_bid_price} onChange={onInputChange} disabled={!!selectedItem} />
+          </InputGroup>
+        </FormControl>
+      </Flex>
+
+      {isAdmin ?
+        (
+          <FormControl mb='3'>
+            <FormLabel>Close Date</FormLabel>
+            <Input type='datetime-local' name='closes_at' step={1} value={closes_at} onChange={onInputChange} readOnly={!isAdmin} />
+          </FormControl>
+        ) : (
+          <Box mt='10'>
+            <Countdown item={selectedItem} />
+          </Box>
+        )
+      }
+
     </ItemModalLayout>
   );
 };

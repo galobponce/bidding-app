@@ -1,4 +1,4 @@
-from .models import Itemdatetime
+from .models import Item
 from rest_framework import serializers
 
 

@@ -15,12 +15,20 @@ export async function modifyItem(item: Item) {
       method: 'PATCH',
       body
     });
-    
-    const newItem = await res.json();
+
+    const resJSON = await res.json();
+
+    if (!res.ok) {
+      Object.keys(resJSON).map(error => {
+        console.log(error);
+        
+        throw Error(resJSON[error]);
+      });
+    };
 
     return {
       ok: true,
-      newItem
+      newItem: resJSON
     }
 
   } catch (error) {

@@ -7,4 +7,8 @@ export interface Item {
   last_bid_price: number;
   closes_at: string;
   closed: boolean; // Virtual Property
+
+  // Virtual Property, it is used to know if current user 
+  // is using the auto bid feature on the item
+  using_auto_bid: boolean;
 };

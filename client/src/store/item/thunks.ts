@@ -51,7 +51,7 @@ export const startLoadingItems = (page: number, filters: Filters) => {
 
     if (!res.ok) {
       dispatch(generateToast({
-        title: `There was an error saving the item`,
+        title: res.error,
         status: 'error' 
       }));
       dispatch(setLoading(false));

@@ -2,10 +2,10 @@ import { FC, useEffect, useState } from 'react';
 import { Box, Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 
 import { ItemStatus } from '../components';
-import { close } from '../../store/itemDetail';
 import { BidItemButton } from '../components/bidItem';
 import { DeleteItemButton } from '../components/deleteItem';
 import { useGlobalDispatch, useGlobalSelector } from '../../hooks';
+import { close, startCreateAutoBid, startDeleteAutoBid } from '../../store/itemDetail';
 
 
 /**
@@ -31,6 +31,16 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
   }, [selectedItem]);
 
 
+
+  const handleAutoBidClick = () => {
+    if (selectedItem.using_auto_bid) {
+      dispatch(startDeleteAutoBid(selectedItem.id, Number(uid)));
+    } else {
+      dispatch(startCreateAutoBid(selectedItem, Number(uid)));
+    }
+  }
+
+
   return (
     <Modal onClose={() => dispatch(close())} size='2xl' isOpen={isOpen} isCentered>
       <ModalOverlay />
@@ -54,7 +64,14 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
           {children}
 
         </ModalBody>
-        <ModalFooter justifyContent={isAdmin ? (isNewItem ? 'end' : 'space-between') : 'end'}>
+        <ModalFooter justifyContent={isAdmin && isNewItem && 'end' || 'space-between'}>
+
+          {/* Can delete only if user is admin and there is an item */}
+          {!isAdmin && selectedItem &&
+            <Button colorScheme='yellow' onClick={handleAutoBidClick} disabled={selectedItem.closed} isLoading={isLoading}>
+              {selectedItem.using_auto_bid ? 'Stop Auto Bid' : 'Start Auto Bid'}
+            </Button>
+          }
 
           {/* Can delete only if user is admin and there is an item */}
           {isAdmin && selectedItem && <DeleteItemButton itemId={selectedItem.id} variant='text' />}
@@ -64,12 +81,13 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
               Close
             </Button>
 
-            {/* Can save only if user is admin */}
-            {isAdmin && <Button colorScheme='blue' disabled={!canSave} onClick={onSave} isLoading={isLoading}>Save</Button>}
+            {/* Can save only if user is admin and item is not closed */}
+            {isAdmin && <Button colorScheme='blue' disabled={!canSave || selectedItem.closed} onClick={onSave} isLoading={isLoading}>Save</Button>}
+
+            {/* Can bid only if user is not admin and there is an item */}
+            {!isAdmin && selectedItem && <BidItemButton item={selectedItem} disabled={!canBid} />}
           </Box>
 
-          {/* Can bid only if user is not admin and there is an item */}
-          {!isAdmin && selectedItem && <BidItemButton itemId={selectedItem.id} disabled={!canBid} />}
 
         </ModalFooter>
       </ModalContent>

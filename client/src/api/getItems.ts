@@ -17,11 +17,17 @@ export async function getItems(offset: number, filters: Filters): Promise<Respon
     }
 
     const res = await fetch(url);
-    const items = await res.json();
+    const resJSON = await res.json();
+
+    if (!res.ok) {
+      Object.keys(resJSON).map(error => {
+        throw Error(resJSON[error]);
+      });
+    };
 
     return {
       ok: true,
-      ...items
+      ...resJSON
     }
   } catch (error) {
     return {

@@ -16,11 +16,17 @@ export async function createItem(item: Item) {
       body
     });
     
-    const newItem = await res.json();
+    const resJSON = await res.json();
+
+    if (!res.ok) {
+      Object.keys(resJSON).map(error => {
+        throw Error(resJSON[error]);
+      });
+    };
 
     return {
       ok: true,
-      newItem
+      newItem: resJSON
     }
 
   } catch (error) {

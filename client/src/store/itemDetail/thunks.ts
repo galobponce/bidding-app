@@ -68,12 +68,12 @@ export const startCreateAutoBid = (item: Item, uid: number) => {
 }
 
 
-export const startDeleteAutoBid = (itemId: number, uid: number) => {
+export const startDeleteAutoBid = (item: Item, uid: number) => {
   return async (dispatch: Dispatch) => {
     dispatch(setLoading(true));
 
     // Gets the auto bid
-    const resGet = await getAutoBid(itemId, uid);
+    const resGet = await getAutoBid(item.id, uid);
 
     if (!resGet.ok) {
       dispatch(generateToast({
@@ -89,7 +89,7 @@ export const startDeleteAutoBid = (itemId: number, uid: number) => {
 
 
     // Deletes the auto bid
-    const resDelete = await deleteAutoBid(auto_bid.id);
+    const resDelete = await deleteAutoBid(auto_bid?.id);
 
     if (!resDelete.ok) {
       dispatch(generateToast({
@@ -99,6 +99,8 @@ export const startDeleteAutoBid = (itemId: number, uid: number) => {
       dispatch(setLoading(false));
       return;
     }
+
+    dispatch(setSelectedItem({ ...item, using_auto_bid: false }));
 
     dispatch(setLoading(false));
   }

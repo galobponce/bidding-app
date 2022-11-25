@@ -19,9 +19,7 @@ export async function modifyItem(item: Item) {
     const resJSON = await res.json();
 
     if (!res.ok) {
-      Object.keys(resJSON).map(error => {
-        console.log(error);
-        
+      Object.keys(resJSON).map(error => {        
         throw Error(resJSON[error]);
       });
     };

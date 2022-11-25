@@ -34,7 +34,7 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
 
   const handleAutoBidClick = () => {
     if (selectedItem?.using_auto_bid) {
-      dispatch(startDeleteAutoBid(selectedItem.id, Number(uid)));
+      dispatch(startDeleteAutoBid(selectedItem, Number(uid)));
     } else {
       dispatch(startCreateAutoBid(selectedItem, Number(uid)));
     }

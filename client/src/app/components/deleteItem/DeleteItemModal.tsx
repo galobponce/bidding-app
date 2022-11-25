@@ -32,20 +32,21 @@ export const DeleteItemModal: FC<DeleteModalInterface> = ({ itemId, isOpen, onCl
 
         <Alert
           status='warning'
-          variant='solid'
+          bg='white'
+          _dark={{ bg: 'gray.800' }}
           flexDirection='column'
           alignItems='center'
           justifyContent='center'
           textAlign='center'
         >
-          <AlertIcon boxSize='40px' mr={0} />
+          <AlertIcon color='gray.800' _dark={{ color: 'white' }} boxSize='40px' mr={0} />
           <AlertTitle mt={4} mb={1} fontSize='lg'>
             Are you sure?
           </AlertTitle>
         </Alert>
 
-        <ModalFooter justifyContent='center' gap='3' bg='orange.500' _dark={{ bg: 'orange.200' }}>
-          <Button onClick={onClose} colorScheme='whiteAlpha'>
+        <ModalFooter justifyContent='center' gap='3' bg='white' _dark={{ bg: 'gray.800' }}>
+          <Button onClick={onClose}>
             Cancel
           </Button>
           <Button colorScheme='red' _dark={{ bg: 'red.400', color: 'white' }} onClick={handleDelete}>

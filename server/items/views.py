@@ -1,5 +1,6 @@
 import json
 from .models import Item
+from django.db.models import F
 from rest_framework import filters
 from rest_framework import generics
 from autobids.models import AutoBid
@@ -39,27 +40,39 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
         old_item = self.get_object()
         new_item = serializer.save()
 
-        send_event("items_updated", "message", { "updated_item": serializer.data })
 
-        # If the change was a bid
+        # If the change was an admin update (title, description, etc)
+        # only sends the change to users
         if (old_item.last_bid_user == new_item.last_bid_user or old_item.last_bid_price >= new_item.last_bid_price):
+            send_event("items_updated", "message", { "updated_item": serializer.data })
             return
 
+        
+        # --- If the change was a bid --- #
+
+        # Gets autobids configured for bid item
         autobids = AutoBid.objects.filter(item=new_item.id).values()
 
-        for autobid in autobids:
+        updated_item_vqs = []
 
-            # If the auto bid is from another user, make a new bid
-            if autobid['user'] == new_item.last_bid_user:
-                continue
+        # Updates the item with the auto bid bot until it reaches the configured max price
+        for i in range(5):
+            print('iteracion')
+            for autobid in autobids:
 
-            # Sets the price + 1 and updates the user
-            Item.objects.filter(pk=new_item.id).update(last_bid_price=new_item.last_bid_price+1, last_bid_user=autobid['user'])
+                # If the auto bid is from the winning user, does nothing
+                if autobid['user'] == new_item.last_bid_user:
+                    continue
 
-            auto_bid_item_qs = Item.objects.filter(pk=new_item.id).values()
+                # Updates the item with a new bid
+                # Sets the price + 1 and updates the user
+                Item.objects.filter(pk=new_item.id).update(last_bid_price=F('last_bid_price') + 1, last_bid_user=autobid['user'])
 
-            # Sends change to client
-            for auto_bid_item in auto_bid_item_qs:
-                send_event("items_updated", "message", { "updated_item": auto_bid_item })
-            
-            
+
+
+        # Sends change to client
+        updated_item_vqs = Item.objects.filter(pk=new_item.id).values()
+        for updated_item in updated_item_vqs:
+            send_event("items_updated", "message", { "updated_item": updated_item })
+                
+                

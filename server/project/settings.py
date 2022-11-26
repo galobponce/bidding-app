@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'channels',
     'items',
     'autobids',
+    'usersettings'
 ]
 
 MIDDLEWARE = [

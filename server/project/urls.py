@@ -21,4 +21,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('items.urls')),
     path('', include('autobids.urls')),
+    path('', include('usersettings.urls')),
 ]

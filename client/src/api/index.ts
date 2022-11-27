@@ -6,3 +6,5 @@ export * from './deleteItem';
 export * from './getAutoBid';
 export * from './createAutoBid';
 export * from './deleteAutoBid';
+export * from './getUserSettings';
+export * from './saveUserSettings';

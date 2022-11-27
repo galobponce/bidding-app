@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
 import { appRoutes } from '.';
-import { Home } from '../pages';
+import { Home, Settings } from '../pages';
 
 
 export const AppRouter: FC = () => {
@@ -10,6 +10,8 @@ export const AppRouter: FC = () => {
     <Routes>
 
       <Route path={appRoutes.HOME} element={<Home />} />
+
+      <Route path={appRoutes.SETTINGS} element={<Settings />} />
 
       <Route path={appRoutes.NOT_FOUND} element={<Navigate to={appRoutes.HOME} />} />
 

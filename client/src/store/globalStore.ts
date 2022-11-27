@@ -4,6 +4,7 @@ import { authSlice } from './auth';
 import { itemSlice } from './item';
 import { toastSlice } from './toast';
 import { itemDetailSlice } from './itemDetail';
+import { userSettingsSlice } from './userSettings';
 
 
 export const globalStore = configureStore({
@@ -11,7 +12,8 @@ export const globalStore = configureStore({
     toast: toastSlice.reducer,
     auth: authSlice.reducer,
     item: itemSlice.reducer,
-    itemDetail: itemDetailSlice.reducer
+    itemDetail: itemDetailSlice.reducer,
+    userSettings: userSettingsSlice.reducer
   }
 });
 

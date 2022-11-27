@@ -26,7 +26,19 @@ class UserSettingSerializer(serializers.ModelSerializer):
         """
         Checks that the auto bid alert must in between 0 and 100
         """
-        if value < 0 or value > 100:
+        if value > 100:
             raise serializers.ValidationError('The auto bid alert cannot be higher than 100', code='invalid')
+
+        if value < 0:
+            raise serializers.ValidationError('The auto bid alert cannot be lower than 0', code='invalid')
+            
+        return value
+
+    def validate_auto_bid_max_amount(self, value):
+        """
+        Checks that the max auto bid amount must be greater than 0
+        """
+        if value < 0:
+            raise serializers.ValidationError('The max auto bid amount cannot be lower than 0', code='invalid')
             
         return value

@@ -3,7 +3,7 @@ import { API_URL } from './config';
 export async function getAutoBid(itemId: number, uid: number) {
   try {
     
-    const res = await fetch(`${API_URL}autobids/?item=${itemId}&user=${uid}`, { method: 'GET' });
+    const res = await fetch(`${API_URL}autobids/?item=${itemId}&user=${uid}`);
 
     const resJSON = await res.json();    
 

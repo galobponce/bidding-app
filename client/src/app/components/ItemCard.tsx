@@ -17,7 +17,16 @@ export const ItemCard: FC<{ item: Item }> = ({ item }) => {
 
 
   return (
-    <Flex minW='18rem' maxW='20rem' flexDir='column' justifyContent='space-between' p='5' borderRadius='lg' _dark={{ boxShadow: 'dark-lg' }} boxShadow='2xl'>
+    <Flex
+      minW='18rem'
+      maxW='20rem'
+      flexDir='column'
+      justifyContent='space-between'
+      p='5'
+      borderRadius='lg'
+      _dark={{ boxShadow: 'dark-lg' }}
+      boxShadow='2xl'
+    >
 
       <Box>
 

@@ -49,19 +49,39 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
         
         # --- If the change was a bid --- #
-
         self.make_auto_bids(new_item.id)
 
         # Sends change to client
         updated_item = Item.objects.filter(pk=new_item.id).values()[0]
         send_event("items_updated", "message", { "updated_item": updated_item })
 
-        
+        self.bid_alert(updated_item['last_bid_user'])
 
 
-        
+    def bid_alert(self, user_id):
+        """
+        Notifies if user used the configured (or more) percentage of max amount for all his bids
+        """
+        user_settings = UserSetting.objects.filter(user=user_id).values()[0]
+        auto_bid_max_amount = user_settings['auto_bid_max_amount']
+        auto_bid_alert = user_settings['auto_bid_alert'] // 100
+        items_bid_by_user = len(Item.objects.filter(last_bid_user=user_id).values())
+
+
+        if (items_bid_by_user // auto_bid_max_amount) * 100 >= auto_bid_max_amount * auto_bid_alert:
+            send_event("notifications", "message", { 
+                "notification": { 
+                    "to": user_id,
+                    "message": "You have used the configured percentage of the max amount for your bids" 
+                }
+            })
+
 
     def make_auto_bids(self, item_id):
+        """
+        Makes corresponding auto bids for an item
+        """
+
         # Get configured autobids for specific item
         configured_autobids = AutoBid.objects.filter(item=item_id).values()
 
@@ -93,7 +113,10 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
                 # If the user cant autobid because of the max amount, sends notification
                 elif item['last_bid_user'] != configured_autobid_user: #
                     send_event("notifications", "message", { 
-                        "notification": "Could not autobid because there is not enough funds"
+                        "notification": {
+                            "to": configured_autobid_user,
+                            "message": "Could not autobid because there is not enough funds"
+                        } 
                     })
                     continue
                 else:

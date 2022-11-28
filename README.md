@@ -4,7 +4,6 @@
 
 A web auction application for bidding on antique items.
 
-
 <br/>
 
 # :camera: Images:
@@ -14,7 +13,6 @@ A web auction application for bidding on antique items.
 ![img](https://github.com/galobponce/bidding-app/blob/main/img/item-detail.png)
 
 <br/>
-
 
 # :unlock: Functionalities:
     - Dummy user authentication with users stored in json at client.
@@ -31,7 +29,14 @@ A web auction application for bidding on antique items.
     - Simple pagination for item gallery.
     - Light and Dark Mode.
     - Fully responsive design.
+    
 
+<br/>
+
+
+# :lock: Future functionalities:
+    - Advanced user authentication.
+    - Implement TDD on critical react components.
 
 <br/>
 

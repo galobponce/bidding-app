@@ -1,11 +1,11 @@
 import { Dispatch } from '@reduxjs/toolkit';
 
 import { generateToast } from '../toast';
-import { Item } from '../../common/types';
+import { BidHistory, Item } from '../../common/types';
 import { setLoading } from '../item/itemSlice';
 import { getUserFromUid } from '../../auth/utils';
 import { setSelectedItem } from './itemDetailSlice';
-import { createAutoBid, deleteAutoBid, getAutoBid } from '../../api';
+import { createAutoBid, deleteAutoBid, getAutoBid, getItemBidHistory } from '../../api';
 
 
 /**
@@ -38,7 +38,16 @@ import { createAutoBid, deleteAutoBid, getAutoBid } from '../../api';
 
     const { using_auto_bid } = res;
 
-    dispatch(setSelectedItem({ ...item, last_bid_username, using_auto_bid }));
+
+    let { bid_history } = await getItemBidHistory(item?.id);
+
+    // Appends username to each bid history 
+    bid_history = await Promise.all(bid_history.map(async (history): Promise<BidHistory> => {
+      return { ...history, username: (await getUserFromUid(history.user)).username };
+    }));
+    
+
+    dispatch(setSelectedItem({ ...item, last_bid_username, using_auto_bid, bid_history }));
 
     dispatch(setLoading(false));
   }

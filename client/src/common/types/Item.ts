@@ -1,3 +1,5 @@
+import { BidHistory } from './BidHistory';
+
 export interface Item {
   id: number;
   title: string;
@@ -11,4 +13,7 @@ export interface Item {
   // Virtual Property, it is used to know if current user 
   // is using the auto bid feature on the item
   using_auto_bid: boolean;
+
+  // Virtual Property
+  bid_history: BidHistory[];
 };

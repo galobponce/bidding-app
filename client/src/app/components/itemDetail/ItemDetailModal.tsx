@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { Box, Checkbox, Flex, FormControl, FormLabel, Input, InputGroup, InputLeftElement, Textarea } from '@chakra-ui/react';
+import { Box, Checkbox, Flex, FormControl, FormLabel, Input, InputGroup, InputLeftElement, Table, TableCaption, TableContainer, Tbody, Td, Textarea, Tfoot, Th, Thead, Tr } from '@chakra-ui/react';
 
 import { Countdown } from '../Countdown';
 import { Item } from '../../../common/types';
@@ -141,6 +141,31 @@ export const ItemDetailModal: FC = () => {
           <Box mt='10'>
             <Countdown item={selectedItem} />
           </Box>
+        )
+      }
+
+      {
+        isAdmin && (
+          <TableContainer mt='10'>
+            
+            <Table variant='simple' size='sm'>
+              <TableCaption placement='top' fontSize='lg'>Bid History</TableCaption>
+              <Thead>
+                <Tr>
+                  <Th>User</Th>
+                  <Th isNumeric>Price</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                { selectedItem?.bid_history.map(history => (
+                  <Tr key={history.id}>
+                    <Td>{history.username}</Td>
+                    <Td isNumeric>{history.price}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
         )
       }
 

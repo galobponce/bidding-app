@@ -8,3 +8,4 @@ export * from './createAutoBid';
 export * from './deleteAutoBid';
 export * from './getUserSettings';
 export * from './saveUserSettings';
+export * from './getItemBidHistory';

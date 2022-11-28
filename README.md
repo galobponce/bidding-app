@@ -7,6 +7,11 @@ A web auction application for bidding on antique items.
 
 <br/>
 
+# :camera: Images:
+
+![img](https://github.com/galobponce/bidding-app/blob/main/img/home-admin.png)
+
+![img](https://github.com/galobponce/bidding-app/blob/main/img/item-detail.png)
 
 <br/>
 

@@ -3,6 +3,7 @@ from django.db.models import F
 from rest_framework import filters
 from rest_framework import generics
 from autobids.models import AutoBid
+from bidhistory.models import BidHistory
 from usersettings.models import UserSetting
 from rest_framework import permissions
 from .serializers import ItemSerializer
@@ -49,6 +50,10 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
         
         # --- If the change was a bid --- #
+
+        # Make a bid history
+        BidHistory(item=new_item, user=new_item.last_bid_user, price=new_item.last_bid_price).save()
+
         self.make_auto_bids(new_item.id)
 
         # Sends change to client
@@ -64,11 +69,14 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
         """
         user_settings = UserSetting.objects.filter(user=user_id).values()[0]
         auto_bid_max_amount = user_settings['auto_bid_max_amount']
-        auto_bid_alert = user_settings['auto_bid_alert'] // 100
-        items_bid_by_user = len(Item.objects.filter(last_bid_user=user_id).values())
+        auto_bid_alert = user_settings['auto_bid_alert'] / 100
+        items_bid_by_user = Item.objects.filter(last_bid_user=user_id).values()
+        total_money_bid = 0
 
+        for item in items_bid_by_user:
+            total_money_bid += item['last_bid_price']
 
-        if (items_bid_by_user // auto_bid_max_amount) * 100 >= auto_bid_max_amount * auto_bid_alert:
+        if total_money_bid >= auto_bid_max_amount * auto_bid_alert:
             send_event("notifications", "message", { 
                 "notification": { 
                     "to": user_id,
@@ -109,6 +117,9 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
                     
                     # Makes an auto bid
                     item_qs.update(last_bid_price=F('last_bid_price') + 1, last_bid_user=configured_autobid_user)
+
+                    # Make a bid history
+                    BidHistory(item=item['id'], user=item['last_bid_user'], price=item['last_bid_price'] + 1).save()
 
                 # If the user cant autobid because of the max amount, sends notification
                 elif item['last_bid_user'] != configured_autobid_user: #

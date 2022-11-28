@@ -101,7 +101,7 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
                 configured_autobid_user = configured_autobid['user']
 
                 # Gets the most updated version of the item
-                item_qs = Item.objects.filter(pk=item_id).values()
+                item_qs = Item.objects.filter(pk=item_id)
                 item = item_qs[0]
 
                 # Get user settings
@@ -112,17 +112,17 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
                 max_price_for_auto_bid = user_settings['auto_bid_max_amount'] // items_with_auto_bid_enabled
 
                 # If the user can make an auto bid
-                if item['last_bid_user'] != configured_autobid_user and item['last_bid_price'] < max_price_for_auto_bid:
+                if item.last_bid_user != configured_autobid_user and item.last_bid_price < max_price_for_auto_bid:
                     allowed_users.append(configured_autobid_user)
                     
                     # Makes an auto bid
                     item_qs.update(last_bid_price=F('last_bid_price') + 1, last_bid_user=configured_autobid_user)
 
                     # Make a bid history
-                    BidHistory(item=item['id'], user=item['last_bid_user'], price=item['last_bid_price'] + 1).save()
+                    BidHistory(item=item, user=item.last_bid_user, price=item.last_bid_price + 1).save()
 
                 # If the user cant autobid because of the max amount, sends notification
-                elif item['last_bid_user'] != configured_autobid_user: #
+                elif item.last_bid_user != configured_autobid_user: #
                     send_event("notifications", "message", { 
                         "notification": {
                             "to": configured_autobid_user,

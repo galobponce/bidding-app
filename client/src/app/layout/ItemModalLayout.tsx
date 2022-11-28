@@ -42,10 +42,10 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
 
 
   return (
-    <Modal onClose={() => dispatch(close())} size='2xl' isOpen={isOpen} isCentered>
+    <Modal onClose={() => dispatch(close())} size={{ base: 'full', md: '2xl', lg: '4xl' }} isOpen={isOpen} isCentered>
       <ModalOverlay />
-      <ModalContent mx='1rem'>
-        <ModalHeader borderRadius='xl' zIndex='sticky' position='sticky' top='0'>
+      <ModalContent>
+        <ModalHeader borderRadius='xl' zIndex='sticky' position='sticky' top='0' bg='white' _dark={{ bg: 'gray.700' }}>
           {isAdmin ? (isNewItem ? 'New' : 'Edit') : 'View'} Item
 
           {!isAdmin &&
@@ -59,7 +59,7 @@ export const ItemModalLayout: FC<ItemModalLayoutInterface> = ({
           <ModalCloseButton tabIndex={-1} mt='1.5' />
 
         </ModalHeader>
-        <ModalBody maxH='xl' overflowY='auto' boxShadow='inner'>
+        <ModalBody mt='5' maxH='xl' overflowY='auto' boxShadow='inner'>
 
           {children}
 

@@ -8,6 +8,9 @@ A web auction application for bidding on antique items.
 <br/>
 
 
+<br/>
+
+
 # :unlock: Functionalities:
     - Dummy user authentication with users stored in json at client.
     - Admin and normal users.
@@ -15,8 +18,11 @@ A web auction application for bidding on antique items.
     - Admins can filter through items by title and description.
     - Admins can order items by close date and price.
     - Normal users can bid for items.
+    - Admins can see bid history in items.
     - Items update (for example a bid, or a change from an Admin) are real time updated in all clients via.
     - Normal users can use the auto bid feature to automatically bid (price + 1) for an item when another user bids.
+    - Auto bid max amount configurable.
+    - Configurable alert when user used a certain percentage of the max amount.
     - Simple pagination for item gallery.
     - Light and Dark Mode.
     - Fully responsive design.
@@ -74,13 +80,3 @@ A [python](https://www.python.org) enviroment (Python 3.9).
 3. Run `npm run dev`.
 
 4. Go to `http://localhost:5173` in your browser.
-
-
-<br/>
-
-
-# :warning: DISCLAIMER:
-
-By now, the auto bid feature is not set with a limit, so when the user sets to start auto bid an item, the auto bid will be made on every bid of other user, without price limit.
-
-In the future, the user will be able to configure the auto bid with an price limit.

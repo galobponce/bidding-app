@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { Modal, ModalOverlay, ModalContent, ModalFooter, Button, FormControl, FormLabel, Input, InputGroup, InputLeftElement, ModalBody, ModalHeader, ModalCloseButton, FormHelperText } from '@chakra-ui/react';
 
 import { Item } from '../../../common/types';
@@ -14,8 +14,18 @@ export const BidItemModal: FC<BidItemModalInterface> = ({ item, isOpen, onClose 
   const { isLoading } = useGlobalSelector(state => state.item);
 
 
-  const { values, onInputChange } = useForm({
-    price: item.last_bid_price,
+  useEffect(() => {
+    if (!item) return;
+
+    setValues({
+      price: item.last_bid_price
+    })
+
+  }, [item]);
+
+
+  const { values, onInputChange, setValues } = useForm({
+    price: 0,
   });
   const { price } = values;
 
@@ -48,7 +58,7 @@ export const BidItemModal: FC<BidItemModalInterface> = ({ item, isOpen, onClose 
                 fontSize='1.2em'
                 children='$'
               />
-              <Input type='number' name='price' min={item.last_bid_price} value={price} onChange={onInputChange} />
+              <Input type='number' name='price' value={price} onChange={onInputChange} />
             </InputGroup>
             <FormHelperText>The price must be higher than the last bid price.</FormHelperText>
           </FormControl>

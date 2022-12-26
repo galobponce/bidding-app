@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react';
-import { Box, Checkbox, Flex, FormControl, FormLabel, Input, InputGroup, InputLeftElement, Table, TableCaption, TableContainer, Tbody, Td, Textarea, Tfoot, Th, Thead, Tr } from '@chakra-ui/react';
+import { Box, Flex, FormControl, FormLabel, Input, InputGroup, InputLeftElement, Table, TableCaption, TableContainer, Tbody, Td, Textarea, Th, Thead, Tr } from '@chakra-ui/react';
 
 import { Countdown } from '../Countdown';
 import { Item } from '../../../common/types';
@@ -144,10 +144,10 @@ export const ItemDetailModal: FC = () => {
         )
       }
 
-      {
-        isAdmin && (
+      { // Shows bid history if the item is created
+        selectedItem?.id && (
           <TableContainer mt='10'>
-            
+
             <Table variant='simple' size='sm'>
               <TableCaption placement='top' fontSize='lg'>Bid History</TableCaption>
               <Thead>
@@ -157,7 +157,7 @@ export const ItemDetailModal: FC = () => {
                 </Tr>
               </Thead>
               <Tbody>
-                { selectedItem?.bid_history.map(history => (
+                {selectedItem?.bid_history.map(history => (
                   <Tr key={history.id}>
                     <Td>{history.username}</Td>
                     <Td isNumeric>{history.price}</Td>
@@ -165,6 +165,7 @@ export const ItemDetailModal: FC = () => {
                 ))}
               </Tbody>
             </Table>
+
           </TableContainer>
         )
       }

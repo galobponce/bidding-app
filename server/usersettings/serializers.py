@@ -8,7 +8,7 @@ class UserSettingSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = UserSetting
-        fields = ['id', 'user', 'auto_bid_alert', 'auto_bid_max_amount']
+        fields = ['id', 'user', 'email', 'auto_bid_alert', 'auto_bid_max_amount']
 
 
     def validate_user(self, value):
@@ -18,6 +18,17 @@ class UserSettingSerializer(serializers.ModelSerializer):
         coincidence = UserSetting.objects.filter(user=value).values()
         if coincidence:
             raise serializers.ValidationError('The user already has settings', code='invalid')
+
+        return value
+
+
+    def validate_email(self, value):
+        """
+        Checks that cannot exists more than one user with the same email
+        """
+        coincidence = UserSetting.objects.filter(email=value).values()
+        if coincidence:
+            raise serializers.ValidationError('The email is already in use', code='invalid')
 
         return value
 

@@ -4,7 +4,6 @@
 
 A web auction application for bidding on antique items.
 
-
 <br/>
 
 # :camera: Images:
@@ -15,7 +14,6 @@ A web auction application for bidding on antique items.
 
 <br/>
 
-
 # :unlock: Functionalities:
     - Dummy user authentication with users stored in json at client.
     - Admin and normal users.
@@ -24,14 +22,21 @@ A web auction application for bidding on antique items.
     - Admins can order items by close date and price.
     - Normal users can bid for items.
     - Admins can see bid history in items.
-    - Items update (for example a bid, or a change from an Admin) are real time updated in all clients via.
+    - Items update (for example a bid, or a change from an Admin) are real time updated in all clients via server side events.
     - Normal users can use the auto bid feature to automatically bid (price + 1) for an item when another user bids.
     - Auto bid max amount configurable.
     - Configurable alert when user used a certain percentage of the max amount.
     - Simple pagination for item gallery.
     - Light and Dark Mode.
     - Fully responsive design.
+    
 
+<br/>
+
+
+# :lock: Future functionalities:
+    - Advanced user authentication.
+    - Implement TDD on critical react components.
 
 <br/>
 

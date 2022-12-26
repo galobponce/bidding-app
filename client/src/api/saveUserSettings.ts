@@ -2,12 +2,13 @@ import { API_URL } from './config';
 import { UserSettings } from '../common/types';
 
 
-export async function saveUserSettings({ id, auto_bid_alert, auto_bid_max_amount }: UserSettings) {
+export async function saveUserSettings({ id, auto_bid_alert, auto_bid_max_amount, email }: UserSettings) {
   try {
 
     const body = new FormData();
     body.append('auto_bid_alert', auto_bid_alert.toString());
     body.append('auto_bid_max_amount', auto_bid_max_amount.toString());
+    body.append('email', email);
 
     const res = await fetch(`${API_URL}usersettings/${id}/`, {
       method: 'PATCH',

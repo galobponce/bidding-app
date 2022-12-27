@@ -82,6 +82,15 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
         # Sends change to client
         updated_item = Item.objects.filter(pk=new_item.id).values()[0]
+
+        
+        # If the user winnig changed, send notification to old user
+        if old_item.last_bid_user:
+            old_user_settings = UserSetting.objects.filter(user=old_item.last_bid_user).values()[0]
+            if old_user_settings['email']:
+                recipient_list = [old_user_settings['email']]
+                send_mail(f'Another user has bid the item: "{updated_item["title"]}"', 'You are no longer winnig the bid on that item', settings.EMAIL_HOST_USER, recipient_list)
+
         send_event('items_updated', 'message', { 'updated_item': updated_item })
 
         self.bid_alert(updated_item['last_bid_user'])
@@ -96,8 +105,10 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
         auto_bid_alert = user_settings['auto_bid_alert'] / 100
         items_bid_by_user = Item.objects.filter(last_bid_user=user_id).values()
         total_money_bid = 0
+        current_item = None
 
         for item in items_bid_by_user:
+            current_item = item
             total_money_bid += item['last_bid_price']
 
         if total_money_bid >= auto_bid_max_amount * auto_bid_alert:
@@ -107,6 +118,10 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
                     'message': 'You have used the configured percentage of the max amount for your bids' 
                 }
             })
+
+            if user_settings['email']:
+                recipient_list = [user_settings['email']]
+                send_mail(f'Alert for: "{current_item["title"]}"', 'You have used the configured percentage of the max amount for your bids', settings.EMAIL_HOST_USER, recipient_list)
 
 
     def make_auto_bids(self, item_id):
@@ -135,6 +150,7 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
                 items_with_auto_bid_enabled = len(AutoBid.objects.filter(user=configured_autobid_user).values())
                 max_price_for_auto_bid = user_settings['auto_bid_max_amount'] // items_with_auto_bid_enabled
 
+
                 # If the user can make an auto bid
                 if item.last_bid_user != configured_autobid_user and item.last_bid_price < max_price_for_auto_bid:
                     allowed_users.append(configured_autobid_user)
@@ -145,6 +161,7 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
                     # Make a bid history
                     BidHistory(item=item, user=item.last_bid_user, price=item.last_bid_price + 1).save()
 
+
                 # If the user cant autobid because of the max amount, sends notification
                 elif item.last_bid_user != configured_autobid_user: #
                     send_event('notifications', 'message', { 
@@ -153,6 +170,11 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
                             'message': 'Could not autobid because there is not enough funds'
                         } 
                     })
+
+                    if user_settings['email']:
+                        recipient_list = [user_settings['email']]
+                        send_mail(f'Could not bid item "{item.title}"', 'There is not enough funds', settings.EMAIL_HOST_USER, recipient_list)
+
                     continue
                 else:
                     continue

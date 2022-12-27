@@ -187,27 +187,33 @@ export const Settings: FC = () => {
         <Button colorScheme='teal' isLoading={isLoading} disabled={!canSave} onClick={onClickSave}>Save Changes</Button>
 
 
-        <ItemDetailModal />
-        <TableContainer w='100%' mt='10'>
-          <Table variant='simple' size='sm'>
-            <TableCaption placement='top' fontSize='lg'>Items Bid</TableCaption>
-            <Thead>
-              <Tr>
-                <Th>Item</Th>
-                <Th isNumeric>Action</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {itemsBidHistorically.map(item => (
-                <Tr key={item.id}>
-                  <Td>{item.title}</Td>
-                  <Td isNumeric><ItemDetailButton item={item} /></Td>
-                </Tr>
-              ))}
-            </Tbody>
-          </Table>
+        {
+          !isAdmin && (
+            <>
+              <ItemDetailModal />
+              <TableContainer w='100%' mt='10'>
+                <Table variant='simple' size='sm'>
+                  <TableCaption placement='top' fontSize='lg'>Items Bid</TableCaption>
+                  <Thead>
+                    <Tr>
+                      <Th>Item</Th>
+                      <Th isNumeric>Action</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {itemsBidHistorically.map(item => (
+                      <Tr key={item.id}>
+                        <Td>{item.title}</Td>
+                        <Td isNumeric><ItemDetailButton item={item} /></Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
 
-        </TableContainer>
+              </TableContainer>
+            </>
+          )
+        }
 
       </Center>
 

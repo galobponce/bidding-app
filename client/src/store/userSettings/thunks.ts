@@ -1,9 +1,9 @@
 import { Dispatch } from '@reduxjs/toolkit'
 
-import { setLoading, setSettings } from '.';
 import { generateToast } from '../toast';
-import { getUserSettings, saveUserSettings } from '../../api';
 import { UserSettings } from '../../common/types';
+import { setLoading, setSettings, setItemsBidHistorically } from '.';
+import { getItemsBidHistoricallyByUser, getUserSettings, saveUserSettings } from '../../api';
 
 
 export const startGetUserSettings = (uid: number) => {
@@ -22,7 +22,20 @@ export const startGetUserSettings = (uid: number) => {
     }
 
     dispatch(setSettings({ ...res.user_settings }));
-    
+
+
+    const resItemsBidHistorically = await getItemsBidHistoricallyByUser(uid);
+
+    if (!res.ok) {
+      dispatch(generateToast({
+        title: res.error,
+        status: 'error' 
+      }));
+      dispatch(setLoading(false));
+      return;
+    }
+
+    dispatch(setItemsBidHistorically(resItemsBidHistorically.items));
 
     dispatch(setLoading(false));
   }
@@ -55,3 +68,14 @@ export const startSaveUserSettings = (userSettings: UserSettings) => {
     dispatch(setLoading(false));
   }
 };
+
+
+export const startGetItemsBidHistorically = (uid: number) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(setLoading(true));
+
+    
+
+    dispatch(setLoading(false));
+  }
+}

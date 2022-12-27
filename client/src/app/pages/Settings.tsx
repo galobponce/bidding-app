@@ -1,11 +1,12 @@
 import { FC, useEffect, useState } from 'react';
-import { Text, Flex, Button, useColorMode, Center, Divider, FormControl, FormLabel, Input, FormHelperText, InputGroup, InputLeftAddon, InputLeftElement, InputRightElement, Tooltip, SimpleGrid } from '@chakra-ui/react';
+import { Text, Flex, Button, useColorMode, Center, Divider, FormControl, FormLabel, Input, FormHelperText, InputGroup, InputLeftAddon, InputLeftElement, InputRightElement, Tooltip, SimpleGrid, TableCaption, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 import { QuestionOutlineIcon } from "@chakra-ui/icons";
 
 import { AppLayout } from '../layout';
 import { changeHtmlBackgroundColor } from '../utils';
-import { startGetUserSettings, startSaveUserSettings } from '../../store/userSettings';
 import { useForm, useGlobalDispatch, useGlobalSelector } from '../../hooks';
+import { ItemDetailModal, ItemDetailButton } from '../components/itemDetail';
+import { startGetUserSettings, startSaveUserSettings } from '../../store/userSettings';
 
 
 export const Settings: FC = () => {
@@ -15,7 +16,7 @@ export const Settings: FC = () => {
   const { colorMode, toggleColorMode } = useColorMode();
   const { uid, isAdmin } = useGlobalSelector(state => state.auth);
   const settingsState = useGlobalSelector(state => state.userSettings);
-  const { isLoading } = settingsState;
+  const { isLoading, itemsBidHistorically } = settingsState;
 
 
   const { values, onInputChange, setValues, clearValues } = useForm({
@@ -51,7 +52,7 @@ export const Settings: FC = () => {
     setCanSave(true);
 
     if (!auto_bid_max_amount) setCanSave(false);
-    
+
     if (!email) setCanSave(false);
 
     if (email == settingsState.email && auto_bid_max_amount == settingsState.auto_bid_max_amount && auto_bid_alert == settingsState.auto_bid_alert) setCanSave(false);
@@ -117,7 +118,7 @@ export const Settings: FC = () => {
                     <Tooltip label='It will be used to notify you about your bids' placement='top' aria-label='email info tooltip'>
                       <QuestionOutlineIcon ml='2' />
                     </Tooltip>
-                  </FormLabel>                  
+                  </FormLabel>
                   <Input name='email' value={email} onChange={onInputChange} type='email' />
                 </FormControl>
               </Flex>
@@ -184,6 +185,29 @@ export const Settings: FC = () => {
 
 
         <Button colorScheme='teal' isLoading={isLoading} disabled={!canSave} onClick={onClickSave}>Save Changes</Button>
+
+
+        <ItemDetailModal />
+        <TableContainer w='100%' mt='10'>
+          <Table variant='simple' size='sm'>
+            <TableCaption placement='top' fontSize='lg'>Items Bid</TableCaption>
+            <Thead>
+              <Tr>
+                <Th>Item</Th>
+                <Th isNumeric>Action</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {itemsBidHistorically.map(item => (
+                <Tr key={item.id}>
+                  <Td>{item.title}</Td>
+                  <Td isNumeric><ItemDetailButton item={item} /></Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+
+        </TableContainer>
 
       </Center>
 

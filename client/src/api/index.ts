@@ -4,6 +4,7 @@ export * from './modifyItem';
 export * from './createItem';
 export * from './deleteItem';
 export * from './getAutoBid';
+export * from './getItemsBidHistoricallyByUser';
 export * from './createAutoBid';
 export * from './deleteAutoBid';
 export * from './getUserSettings';

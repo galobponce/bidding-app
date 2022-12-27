@@ -1,10 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { UserSettings } from '../../common/types';
+import { Item, UserSettings } from '../../common/types';
 
 
 interface UserSettingsState extends UserSettings {
   isLoading: boolean;
+  itemsBidHistorically: Item[];
 }
 
 
@@ -13,7 +14,8 @@ const initialState: UserSettingsState = {
   auto_bid_alert: 0,
   auto_bid_max_amount: 0,
   isLoading: false,
-  email: ''
+  email: '',
+  itemsBidHistorically: []
 };
 
 
@@ -30,8 +32,12 @@ export const userSettingsSlice = createSlice({
       state.auto_bid_alert = action.payload.auto_bid_alert;
       state.auto_bid_max_amount = action.payload.auto_bid_max_amount;
       state.email = action.payload.email || '';
+    },
+
+    setItemsBidHistorically: (state, action: PayloadAction<Item[]>) => {
+      state.itemsBidHistorically = action.payload;
     }
   }
 })
 
-export const { setLoading, setSettings } = userSettingsSlice.actions;
+export const { setLoading, setSettings, setItemsBidHistorically } = userSettingsSlice.actions;

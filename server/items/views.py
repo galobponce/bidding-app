@@ -1,43 +1,67 @@
 from .models import Item
 from django.db.models import F
+from django.conf import settings
 from rest_framework import filters
 from rest_framework import generics
 from autobids.models import AutoBid
-from bidhistory.models import BidHistory
-from usersettings.models import UserSetting
 from rest_framework import permissions
+from django.core.mail import send_mail
 from .serializers import ItemSerializer
+from bidhistory.models import BidHistory
 from django_eventstream import send_event
+from usersettings.models import UserSetting
 
 
 # Usage of class based and generic views to keep the code DRY
 
 class ItemList(generics.ListCreateAPIView):
-    """
+    '''
     List or create an Item
-    """
+    '''
     permission_classes = [permissions.AllowAny]
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ["title", "description"]
-    ordering_fields = ["closes_at", "last_bid_price"]
+    search_fields = ['title', 'description']
+    ordering_fields = ['closes_at', 'last_bid_price']
+
+
+    def get_queryset(self):
+
+        # If user passed, returns items bid by user
+        user_param = self.request.query_params.get('user', None)
+
+        # If history passed, search items bid historically by user
+        history_param = self.request.query_params.get('history', False)
+
+
+        if user_param and history_param:
+            item_ids = []
+            item_ids_qs = BidHistory.objects.filter(user=user_param).values_list('item_id', flat=True)
+
+            for item_id in item_ids_qs:
+                item_ids.append(item_id)
+
+            return Item.objects.filter(pk__in=item_ids)
+
+
+        return super().get_queryset()
 
 
 class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
-    """
+    '''
     Update, delete or get an specific item
-    """
+    '''
     permission_classes = [permissions.AllowAny]
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
 
 
     def perform_update(self, serializer):
-        """
+        '''
         After a bid is made, checks if there are auto bids to perform
         Also, sends event of updated item to client
-        """
+        '''
         old_item = self.get_object()
         new_item = serializer.save()
 
@@ -45,7 +69,7 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
         # If the change was an admin update (title, description, etc)
         # only sends the change to users
         if (old_item.last_bid_user == new_item.last_bid_user or old_item.last_bid_price >= new_item.last_bid_price):
-            send_event("items_updated", "message", { "updated_item": serializer.data })
+            send_event('items_updated', 'message', { 'updated_item': serializer.data })
             return
 
         
@@ -58,15 +82,15 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
         # Sends change to client
         updated_item = Item.objects.filter(pk=new_item.id).values()[0]
-        send_event("items_updated", "message", { "updated_item": updated_item })
+        send_event('items_updated', 'message', { 'updated_item': updated_item })
 
         self.bid_alert(updated_item['last_bid_user'])
 
 
     def bid_alert(self, user_id):
-        """
+        '''
         Notifies if user used the configured (or more) percentage of max amount for all his bids
-        """
+        '''
         user_settings = UserSetting.objects.filter(user=user_id).values()[0]
         auto_bid_max_amount = user_settings['auto_bid_max_amount']
         auto_bid_alert = user_settings['auto_bid_alert'] / 100
@@ -77,18 +101,18 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
             total_money_bid += item['last_bid_price']
 
         if total_money_bid >= auto_bid_max_amount * auto_bid_alert:
-            send_event("notifications", "message", { 
-                "notification": { 
-                    "to": user_id,
-                    "message": "You have used the configured percentage of the max amount for your bids" 
+            send_event('notifications', 'message', { 
+                'notification': { 
+                    'to': user_id,
+                    'message': 'You have used the configured percentage of the max amount for your bids' 
                 }
             })
 
 
     def make_auto_bids(self, item_id):
-        """
+        '''
         Makes corresponding auto bids for an item
-        """
+        '''
 
         # Get configured autobids for specific item
         configured_autobids = AutoBid.objects.filter(item=item_id).values()
@@ -123,10 +147,10 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
 
                 # If the user cant autobid because of the max amount, sends notification
                 elif item.last_bid_user != configured_autobid_user: #
-                    send_event("notifications", "message", { 
-                        "notification": {
-                            "to": configured_autobid_user,
-                            "message": "Could not autobid because there is not enough funds"
+                    send_event('notifications', 'message', { 
+                        'notification': {
+                            'to': configured_autobid_user,
+                            'message': 'Could not autobid because there is not enough funds'
                         } 
                     })
                     continue

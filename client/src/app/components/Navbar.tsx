@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { MdLogout } from 'react-icons/md';
 import { AiFillHome, AiOutlineHome } from 'react-icons/ai';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { IoSettings, IoSettingsOutline } from 'react-icons/io5';
+import { FaRegUser, FaUser } from 'react-icons/fa';
 import { Center, Text, useColorMode, HStack, IconButton, Tooltip } from '@chakra-ui/react';
 
 import { appRoutes } from '../router';
@@ -18,7 +18,7 @@ export const Navbar: FC = () => {
   const dispatch = useGlobalDispatch()
   const { colorMode } = useColorMode();
   const HomeIcon = location.pathname === appRoutes.HOME ? AiFillHome : AiOutlineHome;
-  const SettingsIcon = location.pathname === appRoutes.SETTINGS ? IoSettings : IoSettingsOutline;
+  const UserIcon = location.pathname === appRoutes.SETTINGS ? FaUser : FaRegUser;
 
 
   return (
@@ -61,11 +61,11 @@ export const Navbar: FC = () => {
         </Tooltip>
         <Tooltip label="Settings" aria-label='settings tooltip'>
           <IconButton
-            fontSize='2xl'
+            fontSize='xl'
             aria-label='Settings'
             variant='ghost'
             onClick={() => navigate(appRoutes.SETTINGS)}
-            icon={<SettingsIcon />}
+            icon={<UserIcon />}
           />
         </Tooltip>
         <Tooltip label="Log Out" aria-label='log out tooltip'>

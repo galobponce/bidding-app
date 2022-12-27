@@ -16,26 +16,13 @@ export const ItemBill: FC<{ item: Item, isOpen: boolean, onClose: () => void }> 
 
         <ModalBody display='flex' flexDir='column' gap='2'>
 
-          <Flex gap='1'>
-            <Text fontWeight='bold'>Title: </Text>
-            <Text>{item?.title}</Text>
-          </Flex>
+          <Text><b>Title:</b> {item?.title}</Text>
 
-          <Flex gap='1'>
-            <Text fontWeight='bold'>User: </Text>
-            <Text>{item?.last_bid_username}</Text>
-          </Flex>
+          <Text><b>User:</b> {item?.last_bid_username}</Text>
 
-          <Flex gap='1'>
-            <Text fontWeight='bold'>Price: </Text>
-            <Text>{item?.last_bid_price}</Text>
-          </Flex>
+          <Text><b>Price:</b> {item?.last_bid_price}</Text>
 
-          <Flex gap='1'>
-            <Text fontWeight='bold'>Description: </Text>
-            <Text>{item?.description}</Text>
-          </Flex>
-
+          <Text><b>Description:</b> {item?.description}</Text>
 
         </ModalBody>
 

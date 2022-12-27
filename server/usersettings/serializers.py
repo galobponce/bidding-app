@@ -22,17 +22,6 @@ class UserSettingSerializer(serializers.ModelSerializer):
         return value
 
 
-    def validate_email(self, value):
-        """
-        Checks that cannot exists more than one user with the same email
-        """
-        coincidence = UserSetting.objects.filter(email=value).values()
-        if coincidence:
-            raise serializers.ValidationError('The email is already in use', code='invalid')
-
-        return value
-
-
     def validate_auto_bid_alert(self, value):
         """
         Checks that the auto bid alert must in between 0 and 100

@@ -5,22 +5,26 @@ import { Item } from '../../common/types';
 import { updateItem } from '../../store/item';
 import { useGlobalDispatch, useGlobalSelector } from '../../hooks';
 import { setSelectedItem } from '../../store/itemDetail';
+import { sendItemWonEmail } from '../../api/sendItemWonEmail';
 
 
 export const Countdown: FC<{ item: Item }> = ({ item }) => {
 
   const dispatch = useGlobalDispatch();
   const { selectedItem } = useGlobalSelector(state => state.itemDetail);
+  const { uid } = useGlobalSelector(state => state.auth);
 
   const intervalRef = useRef(0);
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+  const [initialDifference, setInitialDifference] = useState(-1);
 
 
   // When unmounts, clears interval
   useEffect(() => {
+    setInitialDifference(getDifference());
     return () => clearInterval(intervalRef.current);
   }, [])
 
@@ -40,13 +44,24 @@ export const Countdown: FC<{ item: Item }> = ({ item }) => {
   }, [item])
 
 
-  const refreshCountdown = () => {    
-
-    const deadlineTime = new Date(Date.parse(item.closes_at)).getTime();    
+  const getDifference = () => {
+    const deadlineTime = new Date(Date.parse(item?.closes_at)).getTime();    
 
     const now = new Date().getTime();
 
-    const difference = deadlineTime - now;
+    return deadlineTime - now;
+  }
+
+
+  const refreshCountdown = () => {
+
+    const difference = getDifference();
+
+
+    // Sends item won email only when the initial difference was greater than 0
+    if (difference <= 0 && initialDifference > 0 && Number(uid) === item?.last_bid_user) {
+      sendItemWonEmail(item?.id);
+    }
     
     if (difference <= 0) {
       dispatch(updateItem({ item: { ...item, closed: true } }));
@@ -56,6 +71,7 @@ export const Countdown: FC<{ item: Item }> = ({ item }) => {
 
       return;
     }
+
 
     setDays(Math.floor(difference / (1000 * 60 * 60 * 24)));
     setHours(Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));

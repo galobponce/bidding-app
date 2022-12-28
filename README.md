@@ -25,7 +25,9 @@ A web auction application for bidding on antique items.
     - Items update (for example a bid, or a change from an Admin) are real time updated in all clients via server side events.
     - Normal users can use the auto bid feature to automatically bid (price + 1) for an item when another user bids.
     - Auto bid max amount configurable.
+    - Users can configure their mail.
     - Configurable alert when user used a certain percentage of the max amount.
+    - Alerts are sent both by app notifications and mail 
     - Simple pagination for item gallery.
     - Light and Dark Mode.
     - Fully responsive design.
@@ -75,7 +77,9 @@ A [python](https://www.python.org) enviroment (Python 3.9).
 
 5. Run `python manage.py migrate`.
 
-6. Run `python manage.py runserver`.
+6. Complete `server/project/settings.py` with your own mail settings.
+
+7. Run `python manage.py runserver`.
 
 
 <br/>

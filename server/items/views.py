@@ -1,15 +1,16 @@
 from .models import Item
 from django.db.models import F
 from django.conf import settings
-from rest_framework import filters
-from rest_framework import generics
 from autobids.models import AutoBid
-from rest_framework import permissions
 from django.core.mail import send_mail
 from .serializers import ItemSerializer
 from bidhistory.models import BidHistory
 from django_eventstream import send_event
 from usersettings.models import UserSetting
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK
+from rest_framework import filters, generics, permissions, viewsets
 
 
 # Usage of class based and generic views to keep the code DRY
@@ -48,13 +49,56 @@ class ItemList(generics.ListCreateAPIView):
         return super().get_queryset()
 
 
-class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
-    '''
-    Update, delete or get an specific item
-    '''
-    permission_classes = [permissions.AllowAny]
+class ItemViewSet(viewsets.ModelViewSet):
     queryset = Item.objects.all()
     serializer_class = ItemSerializer
+    permission_classes = [permissions.AllowAny]
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['title', 'description']
+    ordering_fields = ['closes_at', 'last_bid_price']
+
+
+    def get_queryset(self):
+
+        # If user passed, returns items bid by user
+        user_param = self.request.query_params.get('user', None)
+
+        # If history passed, search items bid historically by user
+        history_param = self.request.query_params.get('history', False)
+
+
+        if user_param and history_param:
+            item_ids = []
+            item_ids_qs = BidHistory.objects.filter(user=user_param).values_list('item_id', flat=True)
+
+            for item_id in item_ids_qs:
+                item_ids.append(item_id)
+
+            return Item.objects.filter(pk__in=item_ids)
+
+
+        return super().get_queryset()
+
+
+    @action(detail=True)
+    def send_item_won_email(self, request, pk=None):
+        '''
+        Sends an alert to the winning user of the item that he won the item
+        '''
+
+        if (pk):
+            item = Item.objects.filter(pk=pk).values()[0]
+            user = item['last_bid_user']
+
+            if user:
+                user_settings = UserSetting.objects.filter(user=user).values()[0]
+                email = user_settings['email']
+
+                if email:
+                    recipient_list = [email]
+                    send_mail(f'You won the item: "{item["title"]}"', 'You have won it!', settings.EMAIL_HOST_USER, recipient_list)
+
+        return Response(status=HTTP_200_OK)
 
 
     def perform_update(self, serializer):
@@ -182,5 +226,4 @@ class ItemDetail(generics.RetrieveUpdateDestroyAPIView):
             # If there is no more users that can make an auto bid
             if not len(allowed_users):
                 return # Breaks inf. loop
-                
                 
